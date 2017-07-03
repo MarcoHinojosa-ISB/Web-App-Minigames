@@ -1,0 +1,23 @@
+{
+  "name": "inventory",
+  "description": "",
+  "main": "",
+  "authors": [
+    "islaybears <marcndanny@gmail.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/islaybears/inventory-system",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^3.3.7",
+    "angular": "angularjs#^1.6.4",
+    "font-awesome": "^4.7.0",
+    "angular-route": "^1.6.4"
+  }
+}
