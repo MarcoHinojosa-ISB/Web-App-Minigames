@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
+	<script type="text/javascript" src="/bower_components/angular-route/angular-route.min.js"></script>
+	<script type="text/javascript" src="/app/appRoutes.js"></script>
+	<script type="text/javascript" src="/app/pages/home/homeCtrl.js"></script>
+	<script type="text/javascript" src="/app/pages/storage/storageCtrl.js"></script>
+
+	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+</head>
+<body ng-app="inventory" class="container">
+	<h1 class="text-center">Inventory</h1>
+	<div ng-view>
+		{{test}}
+	</div>
+</body>
+
+</html>
