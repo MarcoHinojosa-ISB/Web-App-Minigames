@@ -3,17 +3,21 @@
 <head>
 	<script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
 	<script type="text/javascript" src="/bower_components/angular-route/angular-route.min.js"></script>
+	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/css/main.css">
+
 	<script type="text/javascript" src="/app/appRoutes.js"></script>
 	<script type="text/javascript" src="/app/pages/home/homeCtrl.js"></script>
-	<script type="text/javascript" src="/app/pages/storage/storageCtrl.js"></script>
+	<link rel="stylesheet" href="/app/pages/home/homeStyle.css">
+	<script type="text/javascript" src="/app/pages/bulletHell/bulletHellCtrl.js"></script>
+	<link rel="stylesheet" href="/app/pages/bulletHell/bulletHellStyle.css">
 
-	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/app/partials/headerStyle.css">
+	<link rel="stylesheet" href="/app/partials/sidebarStyle.css">
 </head>
 <body ng-app="inventory" class="container">
-	<h1 class="text-center">Inventory</h1>
-	<div ng-view>
-		{{test}}
-	</div>
+	<div id="header" ng-include="'app/partials/headerView.html'"></div>
+	<div id="sidebar" ng-include="'app/partials/sidebarView.html'"></div>
+	<div id="content" ng-view></div>
 </body>
-
 </html>

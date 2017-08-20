@@ -1,0 +1,26 @@
+body{
+	background-color: #D3DBB2;
+}
+#header{
+	background-color: #D3DBB2;
+	position: relative;
+	height: 10%;
+	border-bottom: 2px solid #E9ECC9;
+
+}
+#sidebar{
+	background-color: rgb(255,255,255);
+	position: absolute;
+	width: 15%;
+	height: 80%;
+	top: 10%;
+	font-size: 20px;
+}
+#content{
+	background-color: #D3DBB2;
+	position: absolute;
+	width: 65%;
+	height: 80%;
+	top: 10%;
+	left: 25%;
+}

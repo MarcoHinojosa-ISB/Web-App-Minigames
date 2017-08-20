@@ -21,6 +21,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/bower_components', express.static(path.join(__dirname, './bower_components')));
 app.use('/app', express.static(path.join(__dirname, './app')));
 
+app.use('/assets', express.static(path.join(__dirname, './assets')));
+
 app.get("/", function(req, res){
     res.sendFile(__dirname+"/index.html");
 });
