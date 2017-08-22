@@ -1,17 +1,25 @@
 .menu{
 	padding-left: 0px;
 	font-family: Verdana, Geneva, sans-serif;
-
+}
+.menu a{
+	text-decoration: none;
+	color: black;
 }
 .menu li{
 	padding: 5px 15px 5px 15px;
 	background-color: rgb(255,255,255);
 	list-style: none;
 }
-.menu li:hover{
-	border-left: 5px solid rgb(220,220,225);
+.menu li span:before{
+	content: '\00bb';
+	color: #777777;
+	position: relative;
+	opacity: 0;
+	left: -10px;
+	transition: 0.2s;
 }
-.menu a{
-	text-decoration: none;
-	color: black;
+.menu li:hover span:before{
+	opacity: 1;
+	left: -5px;
 }
