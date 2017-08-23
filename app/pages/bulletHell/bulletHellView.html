@@ -1,3 +1,7 @@
-<div>
-	<h2>{{test}}</h2>
+<div ng-init="init()">
+	<h6 class='text-center'><b>{{test.xPos}}</b></h6>
+	<div ng-keyup="keyUp($event)" ng-keydown="keyDown($event)">
+		<canvas id="bh-screen" width="800" height="500" tabindex="1" />
+		<canvas id="bh-player" width="800" height="500" tabindex="1"/>
+	</div>
 </div>

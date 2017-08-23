@@ -1,0 +1,9 @@
+#bh-screen{
+	background-color: #ccc;
+	position: absolute;
+	border: 1px solid black;
+}
+#bh-player{
+	position: absolute;
+	border: 1px solid blue;
+}
