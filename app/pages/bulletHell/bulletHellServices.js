@@ -1,16 +1,16 @@
+// PLAYER SERVICE
 app.service("BH_player", function(){
 	var	lives = 3;
 	var	lifePieces = 0;
-	var shotType;
+	var size;
 
-	const width = 20;
-	const height = 20;
-
-	function spawnPlayer(pos, spd, type){
+	function spawnPlayer(data){
 		// Player stats
-		this.xPos = pos[0], this.yPos = pos[1],
-		this.xSpd = spd[0], this.ySpd = spd[1],
-		shotType = type,
+		this.xPos = data.position[0], this.yPos = data.position[1],
+		this.xSpd = data.speed[0], this.ySpd = data.speed[1],
+		this.bulletCount = [],
+		size = data.size;
+
 		// Get Lives/Life pieces
 		this.getLives = function(){
 			return lives;
@@ -20,10 +20,10 @@ app.service("BH_player", function(){
 		},
 		// Get player width/height
 		this.getWidth = function(){
-			return width;
+			return size[0];
 		},
 		this.getHeight = function(){
-			return height;
+			return size[1];
 		},
 		// increment/decrement a life
 		this.gainLife = function(){
@@ -35,67 +35,70 @@ app.service("BH_player", function(){
 		// increment life pieces, if 3 collected then reset to 0 and increment total lives
 		this.gainLifePiece = function(){
 			lifePieces++;
-			
+
 			if(lifePieces === 3){
 				lifePieces = 0;
-				this.gainLife();
+				lives++;
 			}
-		},
-		// reset player settings
-		this.reset = function(){
-			this.xPos = pos[0], this.yPos = pos[1],
-			this.xSpd = spd[0], this.ySpd = spd[1],
-			lives = 3;
-			lifePieces = 0;
-			shotType = type;
-		}
+		};
 	};
 
 	return {
 		spawnPlayer: spawnPlayer
 	};
 })
+// PLAYER BULLET SERVICE
 .service("BH_playerBullet", function(){
-	var power;
-	var width;
-	var height;
+	var size;
 
-	function spawnBullet(pos, spd, size, pow){
-		this.xPos = pos[0], this.yPos = pos[1],
-		this.xSpd = spd[0], this.ySpd = spd[1],
-		width = size[0], height = size[1],
-		power = pow,
+	function spawnBullet(data){
+		this.xPos = data.position[0], this.yPos = data.position[1],
+		this.xSpd = data.speed[0], this.ySpd = data.speed[1],
+		size = data.size,
+		this.power = data.power,
+
 		this.getWidth = function(){
-			return width;
+			return size[0];
 		},
 		this.getHeight = function(){
-			return height;
-		},
-		this.getPower = function(){
-			return power;
+			return size[1];
 		}
 	};
 	return {
 		spawnBullet: spawnBullet
 	};
 })
-.factory("BH_enemy", function(){
-	var hp;
-	var width;
-	var height;
+// ENEMY SERVICE
+.service("BH_enemy", function(){
 
-	function spawnEnemy(pos, spd, initHP){
+	function spawnEnemy(data){
 		// enemy stats
-		this.xPos = pos[0], this.yPos = pos[1],
-		this.xSpd = spd[0], this.ySpd = spd[1],
-		hp = initHP,
-		// get enemy HP
-		this.getHP = function(){
-			return hp;
-		}
+		this.xPos = data.position[0], this.yPos = data.position[1],
+		this.xSpd = data.speed[0], this.ySpd = data.speed[1],
+		this.radius = data.radius,
+		this.health = data.health,
+		this.wave = data.wave,
+		this.phase = 1,
+		this.xScale = 5,
+		this.yScale = 5,
+		this.angle = 0,
+
 		// take damage
 		this.takeDmg = function(dmg){
-			hp - dmg >= 0 ? hp -= dmg : hp = 0;	
+			this.health - dmg >= 0 ? this.health -= dmg : this.health = 0;
+		}
+
+		this.outOfBounds = function(gameWidth, gameHeight){
+			if(this.yPos - this.radius > gameHeight)
+				return true;
+			else if(this.yPos + this.radius < -10)
+				return true;
+			else if(this.xPos - this.radius > gameWidth - 300)
+				return true;
+			else if(this.xPos + this.radius < -10)
+				return true;
+			else
+				return false;
 		}
 	};
 

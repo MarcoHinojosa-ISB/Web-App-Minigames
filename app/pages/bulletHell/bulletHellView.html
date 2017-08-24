@@ -1,7 +1,9 @@
 <div ng-init="init()">
-	<h6 class='text-center'><b>{{test.xPos}}</b></h6>
+	<input type="button" id="bh-start" ng-click="startGame()" value="Start"/>
 	<div ng-keyup="keyUp($event)" ng-keydown="keyDown($event)">
 		<canvas id="bh-screen" width="800" height="500" tabindex="1" />
-		<canvas id="bh-player" width="800" height="500" tabindex="1"/>
+		<canvas id="bh-player" width="800" height="500" tabindex="1" />
+		<canvas id="bh-enemy" width="500" height="500" tabindex="1" />
 	</div>
+
 </div>

@@ -1,9 +1,22 @@
 #bh-screen{
-	background-color: #ccc;
-	position: absolute;
+	background-color: #CCC;
 	border: 1px solid black;
 }
-#bh-player{
+#bh-screen,#bh-player,#bh-enemy,#bh-screen2{
 	position: absolute;
-	border: 1px solid blue;
+
+}
+#bh-start{
+	position: absolute;
+	left: 350px;
+	top: 150px;
+	background-color: #AFF;
+	border: 2px solid #000;
+	border-radius: 8px;
+	font-size: 25px;
+	padding: 1px 20px 1px 20px;
+	z-index: 1;
+}
+#bh-start:hover{
+	border-color: #666;
 }
