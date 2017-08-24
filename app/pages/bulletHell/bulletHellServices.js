@@ -49,20 +49,14 @@ app.service("BH_player", function(){
 })
 // PLAYER BULLET SERVICE
 .service("BH_playerBullet", function(){
-	var size;
 
 	function spawnBullet(data){
 		this.xPos = data.position[0], this.yPos = data.position[1],
 		this.xSpd = data.speed[0], this.ySpd = data.speed[1],
-		size = data.size,
-		this.power = data.power,
+		this.width = data.size[0], this.height = data.size[1],
+		this.power = data.power
 
-		this.getWidth = function(){
-			return size[0];
-		},
-		this.getHeight = function(){
-			return size[1];
-		}
+
 	};
 	return {
 		spawnBullet: spawnBullet
@@ -79,9 +73,6 @@ app.service("BH_player", function(){
 		this.health = data.health,
 		this.wave = data.wave,
 		this.phase = 1,
-		this.xScale = 5,
-		this.yScale = 5,
-		this.angle = 0,
 
 		// take damage
 		this.takeDmg = function(dmg){
@@ -89,17 +80,18 @@ app.service("BH_player", function(){
 		}
 
 		this.outOfBounds = function(gameWidth, gameHeight){
-			if(this.yPos - this.radius > gameHeight)
+			if(this.yPos - this.radius > gameHeight + 10)
 				return true;
 			else if(this.yPos + this.radius < -10)
 				return true;
-			else if(this.xPos - this.radius > gameWidth - 300)
+			else if(this.xPos - this.radius > gameWidth - 300 + 10)
 				return true;
 			else if(this.xPos + this.radius < -10)
 				return true;
 			else
 				return false;
 		}
+
 	};
 
 	return {
