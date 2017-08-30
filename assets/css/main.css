@@ -2,22 +2,14 @@ body{
 	background-color: #D3DBB2;
 }
 #header{
-	background-color: #D3DBB2;
-	position: relative;
+	background-color:  #D3DBB2;
+	display: block;
 }
 #sidebar{
-	background-color: rgb(255,255,255);
-	position: absolute;
-	width: 200px;
-	height: 500px;
-	top: 10%;
+	font-family: Verdana, Geneva, sans-serif;
 	font-size: 20px;
-	border-radius: 10px;
+	width: 200px;
 }
 #content{
 	background-color: #D3DBB2;
-	position: absolute;
-	width: 65%;
-	height: 80%;
-	left: 360px;
 }

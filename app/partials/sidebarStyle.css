@@ -1,13 +1,16 @@
 .menu{
-	font-family: Verdana, Geneva, sans-serif;
+	background-color: #ffffff;
+	border-radius: 10px;
+	height: 500px;
+	padding-left: 10px;
 }
 .menu a{
 	text-decoration: none;
 	color: black;
 }
 .menu li{
-	padding: 5px 15px 5px 0px;
 	list-style: none;
+	padding: 5px 15px 5px 5px;
 }
 .menu li span:before{
 	content: '\00bb';

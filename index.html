@@ -1,27 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<!-- client-side components -->
 	<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
 	<script type="text/javascript" src="/bower_components/angular-route/angular-route.min.js"></script>
 	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+	<!-- stylesheets -->
 	<link rel="stylesheet" href="assets/css/main.css">
-
-	<script type="text/javascript" src="/app/appRoutes.js"></script>
-	<script type="text/javascript" src="/app/pages/home/homeCtrl.js"></script>
-	<link rel="stylesheet" href="/app/pages/home/homeStyle.css">
-	<script type="text/javascript" src="/app/pages/bulletHell/bulletHellCtrl.js"></script>
-	<script type="text/javascript" src="/app/pages/bulletHell/bulletHellServices.js"></script>
-	<link rel="stylesheet" href="/app/pages/bulletHell/bulletHellStyle.css">
-
-	<!-- partials -->
-	<script type="text/javascript" src="/app/partials/headerCtrl.js"></script>
 	<link rel="stylesheet" href="/app/partials/headerStyle.css">
 	<link rel="stylesheet" href="/app/partials/sidebarStyle.css">
+	<link rel="stylesheet" href="/app/pages/home/homeStyle.css">
+	<link rel="stylesheet" href="/app/pages/bulletHell/bulletHellStyle.css">
+
+	<!-- controllers -->
+	<script type="text/javascript" src="/app/appRoutes.js"></script>
+	<script type="text/javascript" src="/app/pages/home/homeCtrl.js"></script>
+	<script type="text/javascript" src="/app/pages/bulletHell/bulletHellCtrl.js"></script>
+	<script type="text/javascript" src="/app/pages/bulletHell/bulletHellServices.js"></script>
+	<script type="text/javascript" src="/app/partials/headerCtrl.js"></script>
+
 </head>
 <body ng-app="inventory" class="container">
-	<div id="header" ng-include="'app/partials/headerView.html'"></div>
-	<div id="sidebar" ng-include="'app/partials/sidebarView.html'"></div>
-	<div id="content" ng-view></div>
+	<div class="row">
+		<div class="col-md-12" id="header" ng-include="'app/partials/headerView.html'"></div>
+	</div>
+	<div class="row">
+		<div class="col-md-3" id="sidebar" ng-include="'app/partials/sidebarView.html'"></div>
+		<div class="col-md-9" id="content" ng-view></div>
+	</div>
 </body>
 </html>
