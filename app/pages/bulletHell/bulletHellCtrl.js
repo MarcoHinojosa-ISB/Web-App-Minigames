@@ -12,7 +12,6 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 		let enBulletCount = [];
 		let enemyOnScreen = [];
 
-		let shotDelay = 8;	// shot delay for player
 		let pl;
 
 		let points = BH_points;
@@ -30,20 +29,24 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 		$scope.startGame = function(){
 			$("#bh-start").hide();
 
-			//Create player
+			// Create player
 			let data = {
 				position: [50, 400],
-				speed: [2, 2],
+				speed: [3, 3],
+				health: 100,
 				radius: 5
 			};
 			pl = new BH_player.spawnPlayer(data);
+			pl.shotDelay = 8;
 
-			// enemy wave intervals
+			// Animate game
+			setInterval(updateActors, 10);
+
+			// Enemy wave intervals
 			let w1;
 
-			setInterval(updateActors, 10);
 			setTimeout(function(){
-				w1 = setInterval(wave1, 700);
+				w1 = setInterval(wave1, 800);
 			}, 1000);
 			setTimeout(function(){
 				clearInterval(w1);
@@ -57,7 +60,7 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 		}
 		$scope.keyUp = function(e){
 			if(e.which === 75)
-				shotDelay = 8;
+				pl.shotDelay = 8;
 			keyState[e.keyCode || e.which] = false;
 		}
 		function keyChecker(){
@@ -91,9 +94,9 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
       }
 			// shoot bullets every 8 milliseconds
 	    if(keyState[75]){
-	    	shotDelay++;
-	    	if(shotDelay > 8){
-					shotDelay = 0;
+	    	pl.shotDelay++;
+	    	if(pl.shotDelay > 8){
+					pl.shotDelay = 0;
 
 					let data = {
 						position: [pl.xPos - 2.5, pl.yPos - pl.radius],
@@ -106,15 +109,51 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 	    }
     }
 
-		// COLLISIONS
+		// =====================ENEMIES WORKSPACE
+		function wave1(){
+			let data = {
+				position: [50, -5],
+				speed: [0.1, 1.4],
+				radius: 10,
+				health: 10,
+				wave: 1
+			}
+			enemyOnScreen.push(new BH_enemy.spawnEnemy(data));
+
+			data = {
+				position: [gameWidth - 360, -5],
+				speed: [-0.1, 1.4],
+				radius: 10,
+				health: 10,
+				wave: 1
+			}
+			enemyOnScreen.push(new BH_enemy.spawnEnemy(data));
+		}
+
+		function wave2(){
+			let data = {
+				position: [-5, 25],
+				speed: [0.4, 0.2],
+				radius: 10,
+				health: 10,
+				wave: 2
+			}
+			enemyOnScreen.push(new BH_enemy.spawnEnemy(data));
+		}
+
+		// ==================COLLISIONS
 		function checkPlayerCollision(){
-			enBulletCount.forEach(function(bullet){
+			enBulletCount = enBulletCount.filter(function(bullet){
+				// Graze collisions
 				if(Math.pow((pl.xPos-bullet.xPos),2) + Math.pow((pl.yPos-bullet.yPos),2) <= Math.pow((pl.radius*3+bullet.radius),2)) {
 					points.AddPoints(5);
 				}
+				// Hitbox collisions
 				if(Math.pow((pl.xPos-bullet.xPos),2) + Math.pow((pl.yPos-bullet.yPos),2) <= Math.pow((pl.radius*0.6+bullet.radius),2)) {
-					pl.loseLife();
+					pl.health - 5 > 0 ? pl.health -= 5 : pl.health = 0;
+					return false;
 				}
+				return true;
 			})
 		}
 		function checkEnemyHitCollision(){
@@ -158,32 +197,6 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 			})
 		}
 
-
-		// ENEMIES WORKSPACE
-		function wave1(){
-			let data = {
-				position: [50, -5],
-				speed: [0.1, 1.4],
-				radius: 10,
-				health: 10,
-				wave: 1,
-				phase: 1
-			}
-			enemyOnScreen.push(new BH_enemy.spawnEnemy(data));
-
-			data = {
-				position: [gameWidth - 360, -5],
-				speed: [-0.1, 1.4],
-				radius: 10,
-				health: 10,
-				wave: 1,
-				phase: 1
-			}
-			enemyOnScreen.push(new BH_enemy.spawnEnemy(data));
-		}
-
-
-
 	  // Animate game
 		function updateActors(){
 			ctx_BG.clearRect(0,0,gameWidth,gameHeight);
@@ -220,23 +233,39 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 		function drawGUI(){
 			ctx_BG.clearRect(0,0,gameWidth,gameHeight);
 
-			//Left Side
+			//==Left Side
 			ctx_BG.beginPath();
 			ctx_BG.rect(0,0,gameWidth-300,gameHeight);
 			ctx_BG.lineWidth=1;
 			ctx_BG.stroke();
 			ctx_BG.closePath();
 
-			//Right Side
+			//==Right Side
 			ctx_BG.beginPath();
 			ctx_BG.rect(gameWidth-300,0,300,gameHeight);
 			ctx_BG.lineWidth=1;
 			ctx_BG.stroke();
-			ctx_BG.fillText(""+points.getPoints(),gameWidth-175, 150);
-			ctx_BG.fillText("Points",gameWidth-200, 100);
+			ctx_BG.closePath();
 
-			ctx_BG.fillText(""+pl.getLives(),gameWidth-175, 350);
-			ctx_BG.fillText("Lives",gameWidth-200, 300);
+			//Text
+			ctx_BG.beginPath();
+			ctx_BG.font = "20px sans-serif";
+			ctx_BG.fillStyle = "#000";
+			ctx_BG.fillText("Points",gameWidth-290, 25);
+			ctx_BG.textAlign = "right";
+			ctx_BG.fillText(""+points.getPointsPadded(),gameWidth-175, 45);
+			ctx_BG.textAlign = "left";
+			ctx_BG.fillText("Health",gameWidth-290, 65);
+			ctx_BG.closePath();
+
+			//health bar
+			ctx_BG.beginPath();
+			ctx_BG.fillStyle = "lime";
+			ctx_BG.strokeStyle = "#000000";
+			ctx_BG.rect(gameWidth-270, 80, (pl.health/pl.getMaxHealth())*100, 20);
+			ctx_BG.fill();
+			ctx_BG.rect(gameWidth-270, 80, 100, 20);
+			ctx_BG.stroke();
 			ctx_BG.closePath();
 		}
 		function drawTitleScreen(){
@@ -264,28 +293,25 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 					//Wave 1 behavior
 					if(enemy.wave === 1){
 						//phase 1
-						if(enemy.phase === 1 && enemy.yPos < 300){
+						if(enemy.phase === 1){
 							enemy.yPos += enemy.ySpd;
-
 							enemy.ySpd *= 0.997;
+
+							if(enemy.yPos > 300){
+								enemy.phase = 2;
+								enemy.shotDelay = 10;
+							}
 						}
 						//phase 2
-						else{
-							if(enemy.phase !== 2){
-								enemy.phase = 2;
-								enemy.shotDelay = 20;
-							}
-
-							// UPDATE MOVEMENT
+						else if(enemy.phase === 2){
 							enemy.xPos += enemy.xSpd;
 							enemy.yPos -= enemy.ySpd;
-
-							enemy.xSpd *= 1.02;
+							enemy.xSpd *= 1.038;
 							enemy.ySpd *= 1.02;
 
 							// SHOOT BULLETS
 							enemy.shotDelay++;
-							if(enemy.shotDelay > 20){
+							if(enemy.shotDelay > 10){
 								enemy.shotDelay = 0;
 
 								let data = {
@@ -294,13 +320,13 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 									speed: [10, 10],
 									acceleration: 0.95,
 									radius: enemy.radius/1.2,
-									type: 1
+									behavior: 1
 								}
 				    		enBulletCount.push(new BH_enemyBullet.spawnBullet(data));
 							}
 						}
 					}
-
+					else if(enemy.wave === 2){}
 					ctx_EN.beginPath();
 					ctx_EN.fillStyle = "gray";
 					ctx_EN.arc(enemy.xPos, enemy.yPos, enemy.radius, 0, 2 * Math.PI);
@@ -328,27 +354,26 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 				return false;
 			});
 
-			// Enemy bullets (circular hitbox, rectangular image)
+			// Enemy bullets
 			enBulletCount = enBulletCount.filter(function(bullet){
 				if(!bullet.outOfBounds(gameWidth, gameHeight)){
 					let img = new Image();
+					img.src = "assets/images/bullethell/shot1.png";
 
-					// Depending on bullet type, select image and determine speed/direction
-					switch(bullet.type){
-						case 1:
-							img.src = "assets/images/bullethell/shot1.png";
-
+					// Depending on bullet type, determine next movements
+					switch(bullet.behavior){
+						case 1: // Acceleration/Deceleration
 							bullet.xSpd * bullet.accel > bullet.getMinSpd() ? bullet.xSpd *= bullet.accel : bullet.xSpd = bullet.getMinSpd();
 							bullet.ySpd * bullet.accel > bullet.getMinSpd() ? bullet.ySpd *= bullet.accel : bullet.ySpd = bullet.getMinSpd();
+
+							bullet.xPos += bullet.xDir * bullet.xSpd;
+							bullet.yPos += bullet.yDir * bullet.ySpd;
 							break;
 					}
 
 					ctx_EN.beginPath();
 					ctx_EN.drawImage(img, bullet.xPos - bullet.radius, bullet.yPos - bullet.radius, bullet.radius*2, bullet.radius*2);
 					ctx_EN.closePath();
-
-					bullet.xPos += bullet.xDir * bullet.xSpd;
-					bullet.yPos += bullet.yDir * bullet.ySpd;
 					return true;
 				}
 				return false;
