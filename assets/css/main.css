@@ -1,15 +1,12 @@
 body{
 	background-color: #D3DBB2;
 }
-#header{
-	background-color:  #D3DBB2;
-	display: block;
-}
 #sidebar{
-	font-family: Verdana, Geneva, sans-serif;
-	font-size: 20px;
+
 	width: 200px;
 }
-#content{
-	background-color: #D3DBB2;
+@media screen and (max-width:991px){
+	#sidebar{
+		width: 825px;
+	}
 }

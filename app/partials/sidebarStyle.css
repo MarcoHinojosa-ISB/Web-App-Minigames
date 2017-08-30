@@ -1,5 +1,7 @@
 .menu{
 	background-color: #ffffff;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 20px;
 	border-radius: 10px;
 	height: 500px;
 	padding-left: 10px;
@@ -10,17 +12,44 @@
 }
 .menu li{
 	list-style: none;
-	padding: 5px 15px 5px 5px;
+	padding: 10px 15px 10px 15px;
 }
-.menu li span:before{
-	content: '\00bb';
-	color: #777777;
-	position: relative;
-	opacity: 0;
-	left: -10px;
-	transition: 0.5s;
+
+@media screen and (min-width:992px){
+	.menu a span:before{
+		content: '\00bb';
+		color: #777777;
+		position: relative;
+		opacity: 0;
+		left: -10px;
+		transition: 0.5s;
+	}
+	.menu a:hover span:before{
+		opacity: 1;
+		left: -5px;
+	}
 }
-.menu li:hover span:before{
-	opacity: 1;
-	left: -5px;
+
+
+@media screen and (max-width:991px){
+	.menu{
+		height: 50px;
+		margin: 0 auto;
+		margin-bottom: 10px;
+	}
+	.menu li{
+		float: left;
+	}
+	.menu a{
+		color: black;
+		transition: 0.2s;
+	}
+	.menu a:hover{
+		color: blue;
+	}
+	.menu li+li{
+		color: blue;
+		border-left: 1px solid #777777;
+	}
+
 }

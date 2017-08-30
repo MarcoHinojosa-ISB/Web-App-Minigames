@@ -14,13 +14,8 @@
 	<link rel="stylesheet" href="/app/pages/home/homeStyle.css">
 	<link rel="stylesheet" href="/app/pages/bulletHell/bulletHellStyle.css">
 
-	<!-- controllers -->
-	<script type="text/javascript" src="/app/appRoutes.js"></script>
-	<script type="text/javascript" src="/app/pages/home/homeCtrl.js"></script>
-	<script type="text/javascript" src="/app/pages/bulletHell/bulletHellCtrl.js"></script>
-	<script type="text/javascript" src="/app/pages/bulletHell/bulletHellServices.js"></script>
-	<script type="text/javascript" src="/app/partials/headerCtrl.js"></script>
-
+	<!-- meta tag for screen size -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body ng-app="inventory" class="container">
 	<div class="row">
@@ -31,4 +26,12 @@
 		<div class="col-md-9" id="content" ng-view></div>
 	</div>
 </body>
+
+<!-- controllers -->
+<script type="text/javascript" src="/app/appRoutes.js"></script>
+<script type="text/javascript" src="/app/pages/home/homeCtrl.js"></script>
+<script type="text/javascript" src="/app/pages/bulletHell/bulletHellCtrl.js"></script>
+<script type="text/javascript" src="/app/pages/bulletHell/bulletHellServices.js"></script>
+<script type="text/javascript" src="/app/partials/headerCtrl.js"></script>
+
 </html>
