@@ -1,11 +1,12 @@
-var pages_dir = "app/pages";
+//var pages_dir = ;
 
 app = angular.module('inventory', ['ngRoute'])
-            .config(function($locationProvider, $routeProvider){
-                $locationProvider.hashPrefix('');
+      .config(function($locationProvider, $routeProvider){
 
-                $routeProvider
-                .when('/',{templateUrl: pages_dir+'/home/homeView.html', controller: 'homeCtrl'})
-                .when('/bullet-hell',{templateUrl: pages_dir+'/bulletHell/bulletHellView.html', controller: 'bulletHellCtrl'})
-                .otherwise({redirectTo:'/'});
-            });
+      $routeProvider
+      .when('/',{templateUrl: 'app/pages/home/homeView.html', controller: 'homeCtrl'})
+      .when('/bullet-hell',{templateUrl: 'app/pages/bulletHell/bulletHellView.html', controller: 'bulletHellCtrl'})
+      .otherwise({redirectTo:'/'});
+
+      $locationProvider.html5Mode(true);
+    });
