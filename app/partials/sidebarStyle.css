@@ -3,7 +3,6 @@
 	font-family: Verdana, Geneva, sans-serif;
 	font-size: 20px;
 	border-radius: 10px;
-	height: 500px;
 	padding-left: 10px;
 }
 .menu a{
@@ -12,10 +11,16 @@
 }
 .menu li{
 	list-style: none;
-	padding: 10px 15px 10px 15px;
 }
 
+/* normal */
 @media screen and (min-width:992px){
+	.menu{
+		height: 500px;
+	}
+	.menu li{
+		padding: 10px 15px 10px 15px;
+	}
 	.menu a span:before{
 		content: '\00bb';
 		color: #777777;
@@ -30,7 +35,7 @@
 	}
 }
 
-
+/* mobile/small */
 @media screen and (max-width:991px){
 	.menu{
 		height: 50px;
@@ -39,17 +44,12 @@
 	}
 	.menu li{
 		float: left;
+		padding: 10px 15px 12px 15px;
 	}
-	.menu a{
-		color: black;
-		transition: 0.2s;
+	.menu a li{
+		transition: 0.3s;
 	}
-	.menu a:hover{
-		color: blue;
+	.menu a:hover li{
+		background-color: #eeeeee;
 	}
-	.menu li+li{
-		color: blue;
-		border-left: 1px solid #777777;
-	}
-
 }
