@@ -23,7 +23,10 @@ app.use('/app', express.static(path.join(__dirname, './app')));
 
 app.use('/assets', express.static(path.join(__dirname, './assets')));
 
-app.get("/", function(req, res){
+// app.get("/", function(req, res){
+//     res.sendFile(__dirname+"/index.html");
+// });
+app.use(function(req, res){
     res.sendFile(__dirname+"/index.html");
 });
 
