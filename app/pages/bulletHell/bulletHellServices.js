@@ -30,6 +30,7 @@ app.service("BH_points", function(){
 		this.xPos = data.position[0], this.yPos = data.position[1],
 		this.xSpd = data.speed[0], this.ySpd = data.speed[1],
 		this.health = data.health, maxHealth = data.health,
+		this.shotDelay = data.shotDelay,
 		this.radius = data.radius,
 
 		// Get Lives/Life pieces
@@ -49,10 +50,12 @@ app.service("BH_points", function(){
 		// enemy stats
 		this.xPos = data.position[0], this.yPos = data.position[1],
 		this.xSpd = data.speed[0], this.ySpd = data.speed[1],
-		this.radius = data.radius,
 		this.health = data.health,
-		this.wave = data.wave,
-		this.phase = 1,
+		this.shotDelay = data.shotDelay,
+		this.radius = data.radius,
+		this.phase = 0,
+		this.angle = 0,
+		this.deadFlag = false;
 
 		// take damage
 		this.takeDmg = function(dmg){
@@ -92,8 +95,8 @@ app.service("BH_points", function(){
 })
 // ENEMY BULLET SERVICE
 .service("BH_enemyBullet", function(){
-	let maxSpd = 10.0;
-	let minSpd = 0.8;
+	let maxSpd = 1.0;
+	let minSpd = 0.01;
 
 	function spawnBullet(data){
 		//stats
@@ -103,6 +106,8 @@ app.service("BH_points", function(){
 		this.accel = data.acceleration,
 		this.radius = data.radius,
 		this.behavior = data.behavior,
+		this.angle = 0,
+
 
 		// fix direction for proper speed
 		this.magnitude = Math.sqrt(this.xPosTarget*this.xPosTarget + this.yPosTarget*this.yPosTarget),

@@ -10,9 +10,9 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 
 		let plBulletCount = [];
 		let enBulletCount = [];
-		let enemyOnScreen = [];
 
-		let pl;
+		let pl = null;
+		let en = null;
 
 		let points = BH_points;
 
@@ -30,27 +30,25 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 			$("#bh-start").hide();
 
 			// Create player
-			let data = {
+			pl = new BH_player.spawnPlayer({
 				position: [50, 400],
-				speed: [3, 3],
+				speed: [1, 1],
 				health: 100,
-				radius: 5
-			};
-			pl = new BH_player.spawnPlayer(data);
-			pl.shotDelay = 8;
+				radius: 5,
+				shotDelay: 8
+			});
+
+			// Create Enemy
+			en = new BH_enemy.spawnEnemy({
+				position: [(gameWidth-300)/2 - 10, -5],
+				speed: [0.0, 1.0],
+				health: 200,
+				radius: 20,
+				shotDelay: 10
+			});
 
 			// Animate game
-			setInterval(updateActors, 10);
-
-			// Enemy wave intervals
-			let w1;
-
-			setTimeout(function(){
-				w1 = setInterval(wave1, 800);
-			}, 1000);
-			setTimeout(function(){
-				clearInterval(w1);
-			}, 6000);
+			setInterval(updateActors, 2);
 		}
 
 		// Keys/Controls
@@ -98,48 +96,16 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 	    	if(pl.shotDelay > 8){
 					pl.shotDelay = 0;
 
-					let data = {
+					let data = new BH_playerBullet.spawnBullet({
 						position: [pl.xPos - 2.5, pl.yPos - pl.radius],
 						speed: [0, 12],
 						size: [5, 15],
 						power: 5
-					}
-	    		plBulletCount.push(new BH_playerBullet.spawnBullet(data));
+					})
+	    		plBulletCount.push(data);
 	    	}
 	    }
     }
-
-		// =====================ENEMIES WORKSPACE
-		function wave1(){
-			let data = {
-				position: [50, -5],
-				speed: [0.1, 1.4],
-				radius: 10,
-				health: 10,
-				wave: 1
-			}
-			enemyOnScreen.push(new BH_enemy.spawnEnemy(data));
-
-			data = {
-				position: [gameWidth - 360, -5],
-				speed: [-0.1, 1.4],
-				radius: 10,
-				health: 10,
-				wave: 1
-			}
-			enemyOnScreen.push(new BH_enemy.spawnEnemy(data));
-		}
-
-		function wave2(){
-			let data = {
-				position: [-5, 25],
-				speed: [0.4, 0.2],
-				radius: 10,
-				health: 10,
-				wave: 2
-			}
-			enemyOnScreen.push(new BH_enemy.spawnEnemy(data));
-		}
 
 		// ==================COLLISIONS
 		function checkPlayerCollision(){
@@ -157,44 +123,42 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 			})
 		}
 		function checkEnemyHitCollision(){
-			enemyOnScreen = enemyOnScreen.filter(function(enemy){
+			if(!en.deadFlag){
 				plBulletCount = plBulletCount.filter(function(bullet){
 					// Get vertical/horizontal distance between enemy and player bullet
-					let distX = Math.abs(enemy.xPos - (bullet.xPos + (bullet.width/2)));
-					let distY = Math.abs(enemy.yPos - (bullet.yPos + (bullet.height/2)));
+					let distX = Math.abs(en.xPos - (bullet.xPos + (bullet.width/2)));
+					let distY = Math.abs(en.yPos - (bullet.yPos + (bullet.height/2)));
 
-					// No collision if distance is greater than
-		 			// the sum of 50% width of enemy and player bullet
-					if (distX > (bullet.width/2 + enemy.radius) || distY > (bullet.height/2 + enemy.radius)){
+					// No collision if distance > 50% width of enemy + player bullet
+					if (distX > (bullet.width/2 + en.radius) || distY > (bullet.height/2 + en.radius)){
 						return true;
 					}
 
-					// Collision detected if distance is less than
-		 			// 50% player bullet
+					// Collision detected if distance < 50% player bullet
 			    if (distX <= (bullet.width/2) || distY <= (bullet.height/2)) {
-						enemy.takeDmg(bullet.power);
+						en.takeDmg(bullet.power);
+						points.AddPoints(50);
 						return false;
 					}
 
 					// Check corners of bullet for collision
 					let dx = distX-bullet.width/2;
-    			let dy = distY-bullet.height/2;
+	  			let dy = distY-bullet.height/2;
 
-    			if(dx*dx + dy*dy <= (enemy.radius*enemy.radius)){
-						enemy.takeDmg(bullet.power);
+	  			if(dx*dx + dy*dy <= (en.radius*en.radius)){
+						en.takeDmg(bullet.power);
+						points.AddPoints(50);
 						return false;
 					}
 					else
 						return true;
 				})
 
-				if(enemy.health <= 0){
-					points.AddPoints(50);
-					return false;
+				if(en.health <= 0){
+					points.AddPoints(500000);
+					en.deadFlag = true;
 				}
-				else
-					return true;
-			})
+			}
 		}
 
 	  // Animate game
@@ -209,7 +173,7 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 			drawBullets();
 			drawPlayer();
 
-			drawEnemies();
+			drawEnemy();
 			checkPlayerCollision();
 			checkEnemyHitCollision();
 		}
@@ -285,58 +249,67 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 			ctx_BG.closePath();
 		}
 
-
-
-		function drawEnemies(){
-			enemyOnScreen = enemyOnScreen.filter(function(enemy){
-				if(!enemy.outOfBounds(gameWidth,gameHeight)){
-					//Wave 1 behavior
-					if(enemy.wave === 1){
-						//phase 1
-						if(enemy.phase === 1){
-							enemy.yPos += enemy.ySpd;
-							enemy.ySpd *= 0.997;
-
-							if(enemy.yPos > 300){
-								enemy.phase = 2;
-								enemy.shotDelay = 10;
-							}
+		function drawEnemy(){
+			if(!en.deadFlag){
+				switch(en.phase){
+					//Enemy enters
+					case 0:
+						en.yPos += en.ySpd;
+						en.ySpd *= 0.985;
+						if(en.ySpd <= 0.05){
+							en.phase++;
 						}
-						//phase 2
-						else if(enemy.phase === 2){
-							enemy.xPos += enemy.xSpd;
-							enemy.yPos -= enemy.ySpd;
-							enemy.xSpd *= 1.038;
-							enemy.ySpd *= 1.02;
 
-							// SHOOT BULLETS
-							enemy.shotDelay++;
-							if(enemy.shotDelay > 10){
-								enemy.shotDelay = 0;
+						break;
+					//Phase 1
+					case 1:
+						// SHOOT BULLETS
+						en.shotDelay++;
+						if(en.shotDelay > 10){
+							en.shotDelay = 0;
 
-								let data = {
-									position: [enemy.xPos, enemy.yPos],
-									target: [pl.xPos - enemy.xPos, pl.yPos - enemy.yPos],
-									speed: [10, 10],
-									acceleration: 0.95,
-									radius: enemy.radius/1.2,
-									behavior: 1
-								}
-				    		enBulletCount.push(new BH_enemyBullet.spawnBullet(data));
-							}
+							let data = new BH_enemyBullet.spawnBullet({
+								position: [en.xPos, en.yPos],
+								target: [Math.cos((en.angle+45 )* (Math.PI / 180))*2, Math.sin((en.angle+45 ) * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
+								speed: [0.2, 0.2],
+								acceleration: 1.008,
+								radius: 5,
+								behavior: 1
+							})
+			    		enBulletCount.push(data);
+							data = new BH_enemyBullet.spawnBullet({
+								position: [en.xPos, en.yPos],
+								target: [Math.cos(((90-en.angle)+45) * (Math.PI/180))*2 , Math.sin(((90-en.angle)+45) * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
+								speed: [0.2, 0.2],
+								acceleration: 1.008,
+								radius: 5,
+								behavior: 1
+							})
+							enBulletCount.push(data);
+							data = new BH_enemyBullet.spawnBullet({
+								position: [en.xPos, en.yPos],
+								target: [Math.cos((Math.random()*180) * (Math.PI/180)), Math.sin((Math.random()*180) * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
+							 	speed: [0.2, 0.2],
+							 	acceleration: 1.005,
+							 	radius: 5,
+							 	behavior: 1
+							})
+							enBulletCount.push(data);
+
+							en.angle += Math.random()*15;
+							if(en.angle >= 90)
+								en.angle -= 90;
 						}
-					}
-					else if(enemy.wave === 2){}
-					ctx_EN.beginPath();
-					ctx_EN.fillStyle = "gray";
-					ctx_EN.arc(enemy.xPos, enemy.yPos, enemy.radius, 0, 2 * Math.PI);
-					ctx_EN.fill();
-					ctx_EN.closePath();
-
-					return true;
+						break;
+					default:
+						break;
 				}
-				return false;
-			});
+				ctx_EN.beginPath();
+				ctx_EN.fillStyle = "gray";
+				ctx_EN.arc(en.xPos, en.yPos, en.radius, 0, 2 * Math.PI);
+				ctx_EN.fill();
+				ctx_EN.closePath();
+			}
 		}
 
 		function drawBullets(){
@@ -363,8 +336,8 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 					// Depending on bullet type, determine next movements
 					switch(bullet.behavior){
 						case 1: // Acceleration/Deceleration
-							bullet.xSpd * bullet.accel > bullet.getMinSpd() ? bullet.xSpd *= bullet.accel : bullet.xSpd = bullet.getMinSpd();
-							bullet.ySpd * bullet.accel > bullet.getMinSpd() ? bullet.ySpd *= bullet.accel : bullet.ySpd = bullet.getMinSpd();
+							bullet.xSpd * bullet.accel < bullet.getMaxSpd() ? bullet.xSpd *= bullet.accel : bullet.xSpd = bullet.getMaxSpd();
+							bullet.ySpd * bullet.accel < bullet.getMaxSpd() ? bullet.ySpd *= bullet.accel : bullet.ySpd = bullet.getMaxSpd();
 
 							bullet.xPos += bullet.xDir * bullet.xSpd;
 							bullet.yPos += bullet.yDir * bullet.ySpd;
