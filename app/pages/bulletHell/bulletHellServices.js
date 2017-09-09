@@ -33,7 +33,11 @@ app.service("BH_points", function(){
 		this.shotDelay = data.shotDelay,
 		this.radius = data.radius,
 
-		// Get Lives/Life pieces
+		// take damage
+		this.takeDmg = function(dmg){
+			this.health - dmg >= 0 ? this.health -= dmg : this.health = 0;
+		}
+		// Get Lives
 		this.getMaxHealth = function(){
 			return maxHealth;
 		}
@@ -45,12 +49,12 @@ app.service("BH_points", function(){
 })
 // ENEMY SERVICE
 .service("BH_enemy", function(){
-
+	let maxHealth = 0;
 	function spawnEnemy(data){
 		// enemy stats
 		this.xPos = data.position[0], this.yPos = data.position[1],
 		this.xSpd = data.speed[0], this.ySpd = data.speed[1],
-		this.health = data.health,
+		this.health = data.health, maxHealth = data.health,
 		this.shotDelay = data.shotDelay,
 		this.radius = data.radius,
 		this.phase = 0,
@@ -61,7 +65,10 @@ app.service("BH_points", function(){
 		this.takeDmg = function(dmg){
 			this.health - dmg >= 0 ? this.health -= dmg : this.health = 0;
 		}
-
+		// Get Lives
+		this.getMaxHealth = function(){
+			return maxHealth;
+		}
 		this.outOfBounds = function(gameWidth, gameHeight){
 			if(this.yPos - this.radius > gameHeight - 0 + 10)
 				return true;
@@ -89,6 +96,7 @@ app.service("BH_points", function(){
 		this.width = data.size[0], this.height = data.size[1],
 		this.power = data.power
 	};
+
 	return {
 		spawnBullet: spawnBullet
 	};
@@ -101,18 +109,27 @@ app.service("BH_points", function(){
 	function spawnBullet(data){
 		//stats
 		this.xPos = data.position[0], this.yPos = data.position[1],
-		this.xPosTarget = data.target[0], this.yPosTarget = data.target[1],
 		this.xSpd = data.speed[0], this.ySpd = data.speed[1],
 		this.accel = data.acceleration,
 		this.radius = data.radius,
 		this.behavior = data.behavior,
 		this.angle = 0,
 
+		// fix direction for proper movement
+		this.magnitude = Math.sqrt(data.target[0]*data.target[0] + data.target[1]*data.target[1]),
+		this.xDir = data.target[0]/this.magnitude, this.yDir = data.target[1]/this.magnitude,
 
-		// fix direction for proper speed
-		this.magnitude = Math.sqrt(this.xPosTarget*this.xPosTarget + this.yPosTarget*this.yPosTarget),
-		this.xDir = this.xPosTarget/this.magnitude, this.yDir = this.yPosTarget/this.magnitude,
+		this.newTarget = function(target){
+			this.magnitude = Math.sqrt(target[0]*target[0] + target[1]*target[1])
+			this.xDir = target[0]/this.magnitude, this.yDir = target[1]/this.magnitude
+		},
 
+		this.getMaxSpd = function(){
+			return maxSpd;
+		},
+		this.getMinSpd = function(){
+			return minSpd;
+		},
 		this.outOfBounds = function(gameWidth, gameHeight){
 			if(this.yPos - this.radius > gameHeight - 0 + this.radius)
 				return true;
@@ -124,13 +141,6 @@ app.service("BH_points", function(){
 				return true;
 			else
 				return false;
-		},
-
-		this.getMaxSpd = function(){
-			return maxSpd;
-		},
-		this.getMinSpd = function(){
-			return minSpd;
 		}
 	};
 	return {

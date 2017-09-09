@@ -42,9 +42,9 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 			en = new BH_enemy.spawnEnemy({
 				position: [(gameWidth-300)/2 - 10, -5],
 				speed: [0.0, 1.0],
-				health: 200,
+				health: 500,
 				radius: 20,
-				shotDelay: 10
+				shotDelay: 0
 			});
 
 			// Animate game
@@ -116,48 +116,61 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 				}
 				// Hitbox collisions
 				if(Math.pow((pl.xPos-bullet.xPos),2) + Math.pow((pl.yPos-bullet.yPos),2) <= Math.pow((pl.radius*0.6+bullet.radius),2)) {
-					pl.health - 5 > 0 ? pl.health -= 5 : pl.health = 0;
+					pl.takeDmg(5);
 					return false;
 				}
 				return true;
 			})
 		}
 		function checkEnemyHitCollision(){
-			if(!en.deadFlag){
-				plBulletCount = plBulletCount.filter(function(bullet){
-					// Get vertical/horizontal distance between enemy and player bullet
-					let distX = Math.abs(en.xPos - (bullet.xPos + (bullet.width/2)));
-					let distY = Math.abs(en.yPos - (bullet.yPos + (bullet.height/2)));
+			plBulletCount = plBulletCount.filter(function(bullet){
+				// Get vertical/horizontal distance between enemy and player bullet
+				let distX = Math.abs(en.xPos - (bullet.xPos + (bullet.width/2)));
+				let distY = Math.abs(en.yPos - (bullet.yPos + (bullet.height/2)));
 
-					// No collision if distance > 50% width of enemy + player bullet
-					if (distX > (bullet.width/2 + en.radius) || distY > (bullet.height/2 + en.radius)){
-						return true;
-					}
-
-					// Collision detected if distance < 50% player bullet
-			    if (distX <= (bullet.width/2) || distY <= (bullet.height/2)) {
-						en.takeDmg(bullet.power);
-						points.AddPoints(50);
-						return false;
-					}
-
-					// Check corners of bullet for collision
-					let dx = distX-bullet.width/2;
-	  			let dy = distY-bullet.height/2;
-
-	  			if(dx*dx + dy*dy <= (en.radius*en.radius)){
-						en.takeDmg(bullet.power);
-						points.AddPoints(50);
-						return false;
-					}
-					else
-						return true;
-				})
-
-				if(en.health <= 0){
-					points.AddPoints(500000);
-					en.deadFlag = true;
+				// No collision if distance > 50% width of enemy + player bullet
+				if (distX > (bullet.width/2 + en.radius) || distY > (bullet.height/2 + en.radius)){
+					return true;
 				}
+
+				// Collision detected if distance < 50% player bullet
+		    if (distX <= (bullet.width/2) || distY <= (bullet.height/2)) {
+					// No points if enemy transitioning to next phase
+					if(!en.deadFlag){
+						en.takeDmg(bullet.power);
+						points.AddPoints(50);
+					}
+					return false;
+				}
+
+				// Check corners of bullet for collision
+				let dx = distX-bullet.width/2;
+  			let dy = distY-bullet.height/2;
+
+  			if(dx*dx + dy*dy <= (en.radius*en.radius)){
+					// No points if enemy transitioning to next phase
+					if(!en.deadFlag){
+						en.takeDmg(bullet.power);
+						points.AddPoints(50);
+					}
+					return false;
+				}
+				else
+					return true;
+			})
+
+			if(en.health <= 0 && !en.deadFlag){
+				en.deadFlag = true;
+				points.AddPoints(500000);
+
+				if(en.phase !== 2){
+					setTimeout(function(){
+						en.deadFlag = false;
+						en.health = en.getMaxHealth();
+						en.phase++;
+					},1000)
+				}
+
 			}
 		}
 
@@ -171,10 +184,12 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 			keyChecker();
 
 			drawBullets();
+
 			drawPlayer();
+			checkPlayerCollision();
+
 
 			drawEnemy();
-			checkPlayerCollision();
 			checkEnemyHitCollision();
 		}
 		function drawPlayer(){
@@ -252,76 +267,107 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 		function drawEnemy(){
 			if(!en.deadFlag){
 				switch(en.phase){
-					//Enemy enters
+					//Phase 0
 					case 0:
+						//Enemy Enters
 						en.yPos += en.ySpd;
 						en.ySpd *= 0.985;
-						if(en.ySpd <= 0.05){
+						if(en.ySpd <= 0.05)
 							en.phase++;
-						}
-
 						break;
 					//Phase 1
 					case 1:
-						// SHOOT BULLETS
 						en.shotDelay++;
-						if(en.shotDelay > 10){
-							en.shotDelay = 0;
-
+						if(en.shotDelay % 10 === 0){
 							let data = new BH_enemyBullet.spawnBullet({
 								position: [en.xPos, en.yPos],
-								target: [Math.cos((en.angle+45 )* (Math.PI / 180))*2, Math.sin((en.angle+45 ) * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
-								speed: [0.2, 0.2],
-								acceleration: 1.008,
+								target: [Math.cos((en.angle+45)* (Math.PI / 180))*2, Math.sin((en.angle+45 ) * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
+								speed: [0.1, 0.1],
+								acceleration: 1.01,
 								radius: 5,
-								behavior: 1
+								behavior: 2
 							})
 			    		enBulletCount.push(data);
 							data = new BH_enemyBullet.spawnBullet({
 								position: [en.xPos, en.yPos],
 								target: [Math.cos(((90-en.angle)+45) * (Math.PI/180))*2 , Math.sin(((90-en.angle)+45) * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
-								speed: [0.2, 0.2],
-								acceleration: 1.008,
+								speed: [0.1, 0.1],
+								acceleration: 1.01,
 								radius: 5,
-								behavior: 1
+								behavior: 2
+							})
+							enBulletCount.push(data);
+						}
+						if(en.shotDelay % 200 == 0){
+							en.shotDelay = 0;
+
+							let data = new BH_enemyBullet.spawnBullet({
+								position: [en.xPos, en.yPos],
+								target: [pl.xPos - en.xPos, pl.yPos - en.yPos],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
+								speed: [0.5, 0.5],
+								acceleration: 1.0,
+							 	radius: 10,
+							 	behavior: 1
+							})
+							enBulletCount.push(data);
+						}
+
+						en.angle += Math.random()*5;
+						if(en.angle >= 90)
+							en.angle -= 90;
+						break;
+					// Phase 2
+					case 2:
+						en.shotDelay++;
+						if(en.shotDelay % 10 === 0 && en.shotDelay < 500){
+							let data = new BH_enemyBullet.spawnBullet({
+								position: [en.xPos, en.yPos],
+								target: [Math.cos((en.angle+45) * (Math.PI / 180))*2, Math.sin((en.angle+45) * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
+								speed: [1, 1],
+								acceleration: 1.02,
+								radius: 7,
+								behavior: 3
 							})
 							enBulletCount.push(data);
 							data = new BH_enemyBullet.spawnBullet({
 								position: [en.xPos, en.yPos],
-								target: [Math.cos((Math.random()*180) * (Math.PI/180)), Math.sin((Math.random()*180) * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
-							 	speed: [0.2, 0.2],
-							 	acceleration: 1.005,
-							 	radius: 5,
-							 	behavior: 1
+								target: [Math.cos(((90-en.angle)+45) * (Math.PI/180))*2 , Math.sin(((90-en.angle)+45) * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
+								speed: [2, 2],
+								acceleration: 1.02,
+								radius: 7,
+								behavior: 3
 							})
 							enBulletCount.push(data);
 
-							en.angle += Math.random()*15;
+							en.angle *= Math.random()+1;
 							if(en.angle >= 90)
 								en.angle -= 90;
 						}
+						if(en.shotDelay > 1300)
+							en.shotDelay = 0;
 						break;
 					default:
 						break;
 				}
-				ctx_EN.beginPath();
-				ctx_EN.fillStyle = "gray";
-				ctx_EN.arc(en.xPos, en.yPos, en.radius, 0, 2 * Math.PI);
-				ctx_EN.fill();
-				ctx_EN.closePath();
 			}
+
+			ctx_EN.beginPath();
+			ctx_EN.fillStyle = "gray";
+			ctx_EN.arc(en.xPos, en.yPos, en.radius, 0, 2 * Math.PI);
+			ctx_EN.fill();
+			ctx_EN.closePath();
 		}
 
 		function drawBullets(){
 			// Player bullets
 			plBulletCount = plBulletCount.filter(function(bullet){
 				if(bullet.yPos + bullet.height > 0){
+					bullet.yPos -= bullet.ySpd;
+
 					ctx_PL.beginPath();
 					ctx_PL.fillStyle = "blue";
 					ctx_PL.fillRect(bullet.xPos, bullet.yPos, bullet.width, bullet.height);
 					ctx_PL.closePath();
-
-					bullet.yPos -= bullet.ySpd;
 					return true;
 				}
 				return false;
@@ -333,15 +379,32 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 					let img = new Image();
 					img.src = "assets/images/bullethell/shot1.png";
 
-					// Depending on bullet type, determine next movements
+					// Depending on bullet behavior, determine next movements
 					switch(bullet.behavior){
-						case 1: // Acceleration/Deceleration
+						case 1: // No Acceleration
+							bullet.xPos += bullet.xDir * bullet.xSpd;
+							bullet.yPos += bullet.yDir * bullet.ySpd;
+							break;
+						case 2: // Straight Accelerating
 							bullet.xSpd * bullet.accel < bullet.getMaxSpd() ? bullet.xSpd *= bullet.accel : bullet.xSpd = bullet.getMaxSpd();
 							bullet.ySpd * bullet.accel < bullet.getMaxSpd() ? bullet.ySpd *= bullet.accel : bullet.ySpd = bullet.getMaxSpd();
 
 							bullet.xPos += bullet.xDir * bullet.xSpd;
 							bullet.yPos += bullet.yDir * bullet.ySpd;
 							break;
+						case 3: // Stop for a bit, then Accelerate to player
+							bullet.xSpd / bullet.accel > bullet.getMinSpd() ? bullet.xSpd /= bullet.accel : bullet.xSpd = bullet.getMinSpd();
+							bullet.ySpd / bullet.accel > bullet.getMinSpd() ? bullet.ySpd /= bullet.accel : bullet.ySpd = bullet.getMinSpd();
+
+							bullet.xPos += bullet.xDir * bullet.xSpd;
+							bullet.yPos += bullet.yDir * bullet.ySpd;
+
+							if(bullet.xSpd === bullet.getMinSpd() || bullet.ySpd === bullet.getMinSpd()){
+								bullet.newTarget([pl.xPos - en.xPos, pl.yPos - en.yPos]);
+								bullet.behavior = 2;
+							}
+							break;
+
 					}
 
 					ctx_EN.beginPath();
