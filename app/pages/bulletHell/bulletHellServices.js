@@ -113,7 +113,6 @@ app.service("BH_points", function(){
 		this.accel = data.acceleration,
 		this.radius = data.radius,
 		this.behavior = data.behavior,
-		this.angle = 0,
 
 		// fix direction for proper movement
 		this.magnitude = Math.sqrt(data.target[0]*data.target[0] + data.target[1]*data.target[1]),

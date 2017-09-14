@@ -8,13 +8,20 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 		let ctx_PL = c_PL.getContext("2d");
 		let ctx_EN = c_EN.getContext("2d");
 
+		// Bullet count
 		let plBulletCount = [];
 		let enBulletCount = [];
 
+		// player/enemy objects
 		let pl = null;
 		let en = null;
 
+		//points
 		let points = BH_points;
+
+		//images
+		let enBulletImg1 = new Image();
+		enBulletImg1.src = "assets/images/bullethell/shot1.png";
 
 		// Screen Parameters
 		const gameWidth = c_BG.getAttribute('width');
@@ -188,7 +195,6 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 			drawPlayer();
 			checkPlayerCollision();
 
-
 			drawEnemy();
 			checkEnemyHitCollision();
 		}
@@ -319,32 +325,54 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 					// Phase 2
 					case 2:
 						en.shotDelay++;
+						if(en.shotDelay % 5 === 0){
+							let data = new BH_enemyBullet.spawnBullet({
+								position: [en.xPos, en.yPos],
+								target: [Math.cos(55 * (Math.PI / 180))*2, Math.sin(55 * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
+								speed: [3, 3],
+								acceleration: 1.05,
+								radius: 7,
+								behavior: 1
+							});
+							enBulletCount.push(data);
+							data = new BH_enemyBullet.spawnBullet({
+								position: [en.xPos, en.yPos],
+								target: [Math.cos(125 * (Math.PI / 180))*2, Math.sin(125 * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
+								speed: [3, 3],
+								acceleration: 1.05,
+								radius: 7,
+								behavior: 1
+							});
+							enBulletCount.push(data);
+						}
 						if(en.shotDelay % 10 === 0 && en.shotDelay < 500){
 							let data = new BH_enemyBullet.spawnBullet({
 								position: [en.xPos, en.yPos],
-								target: [Math.cos((en.angle+45) * (Math.PI / 180))*2, Math.sin((en.angle+45) * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
-								speed: [1, 1],
-								acceleration: 1.02,
+								target: [Math.cos(en.angle * (Math.PI / 180))*2, Math.sin(en.angle * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
+								speed: [1.5, 1.5],
+								acceleration: 1.05,
 								radius: 7,
 								behavior: 3
 							})
 							enBulletCount.push(data);
 							data = new BH_enemyBullet.spawnBullet({
 								position: [en.xPos, en.yPos],
-								target: [Math.cos(((90-en.angle)+45) * (Math.PI/180))*2 , Math.sin(((90-en.angle)+45) * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
-								speed: [2, 2],
-								acceleration: 1.02,
+								target: [Math.cos((360-en.angle) * (Math.PI/180))*2 , Math.sin((360-en.angle) * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
+								speed: [3, 3],
+								acceleration: 1.05,
 								radius: 7,
 								behavior: 3
 							})
 							enBulletCount.push(data);
 
-							en.angle *= Math.random()+1;
-							if(en.angle >= 90)
-								en.angle -= 90;
+							en.angle += 45;
+							if(en.angle >= 360)
+								en.angle = 0;
 						}
-						if(en.shotDelay > 1300)
+						else if(en.shotDelay > 600){
 							en.shotDelay = 0;
+							en.angle = 0;
+						}
 						break;
 					default:
 						break;
@@ -376,9 +404,6 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 			// Enemy bullets
 			enBulletCount = enBulletCount.filter(function(bullet){
 				if(!bullet.outOfBounds(gameWidth, gameHeight)){
-					let img = new Image();
-					img.src = "assets/images/bullethell/shot1.png";
-
 					// Depending on bullet behavior, determine next movements
 					switch(bullet.behavior){
 						case 1: // No Acceleration
@@ -400,15 +425,14 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 							bullet.yPos += bullet.yDir * bullet.ySpd;
 
 							if(bullet.xSpd === bullet.getMinSpd() || bullet.ySpd === bullet.getMinSpd()){
-								bullet.newTarget([pl.xPos - en.xPos, pl.yPos - en.yPos]);
+								bullet.newTarget([pl.xPos - bullet.xPos, pl.yPos - bullet.yPos]);
 								bullet.behavior = 2;
 							}
 							break;
-
 					}
 
 					ctx_EN.beginPath();
-					ctx_EN.drawImage(img, bullet.xPos - bullet.radius, bullet.yPos - bullet.radius, bullet.radius*2, bullet.radius*2);
+					ctx_EN.drawImage(enBulletImg1, bullet.xPos - bullet.radius, bullet.yPos - bullet.radius, bullet.radius*2, bullet.radius*2);
 					ctx_EN.closePath();
 					return true;
 				}
