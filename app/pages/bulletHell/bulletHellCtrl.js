@@ -42,7 +42,7 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 				speed: [1, 1],
 				health: 100,
 				radius: 5,
-				shotDelay: 8
+				shotDelay: 10
 			});
 
 			// Create Enemy
@@ -65,7 +65,7 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 		}
 		$scope.keyUp = function(e){
 			if(e.which === 75)
-				pl.shotDelay = 8;
+				pl.shotDelay = 10;
 			keyState[e.keyCode || e.which] = false;
 		}
 		function keyChecker(){
@@ -100,13 +100,13 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 			// shoot bullets every 8 milliseconds
 	    if(keyState[75]){
 	    	pl.shotDelay++;
-	    	if(pl.shotDelay > 8){
+	    	if(pl.shotDelay > 10){
 					pl.shotDelay = 0;
 
 					let data = new BH_playerBullet.spawnBullet({
-						position: [pl.xPos - 2.5, pl.yPos - pl.radius],
+						position: [pl.xPos - 7.5, pl.yPos - pl.radius],
 						speed: [0, 12],
-						size: [5, 15],
+						size: [15, 30],
 						power: 5
 					})
 	    		plBulletCount.push(data);
@@ -117,12 +117,15 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 		// ==================COLLISIONS
 		function checkPlayerCollision(){
 			enBulletCount = enBulletCount.filter(function(bullet){
+				let distX = Math.abs(pl.xPos - bullet.xPos);
+				let distY = Math.abs(pl.yPos - bullet.yPos);
+
 				// Graze collisions
-				if(Math.pow((pl.xPos-bullet.xPos),2) + Math.pow((pl.yPos-bullet.yPos),2) <= Math.pow((pl.radius*3+bullet.radius),2)) {
+				if(distX*distX + distY*distY <= Math.pow((pl.radius*3+bullet.radius),2)) {
 					points.AddPoints(5);
 				}
 				// Hitbox collisions
-				if(Math.pow((pl.xPos-bullet.xPos),2) + Math.pow((pl.yPos-bullet.yPos),2) <= Math.pow((pl.radius*0.6+bullet.radius),2)) {
+				if(distX*distX + distY*distY <= Math.pow((pl.radius*0.6+bullet.radius),2)) {
 					pl.takeDmg(5);
 					return false;
 				}
@@ -131,7 +134,7 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 		}
 		function checkEnemyHitCollision(){
 			plBulletCount = plBulletCount.filter(function(bullet){
-				// Get vertical/horizontal distance between enemy and player bullet
+				// Get vertical/horizontal distance between the centers of enemy and player bullet
 				let distX = Math.abs(en.xPos - (bullet.xPos + (bullet.width/2)));
 				let distY = Math.abs(en.yPos - (bullet.yPos + (bullet.height/2)));
 
@@ -166,18 +169,23 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 					return true;
 			})
 
+			// Check if enemy health depleted
 			if(en.health <= 0 && !en.deadFlag){
 				en.deadFlag = true;
 				points.AddPoints(500000);
 
-				if(en.phase !== 2){
-					setTimeout(function(){
-						en.deadFlag = false;
-						en.health = en.getMaxHealth();
-						en.phase++;
-					},1000)
+				//transition to next attack phase
+				switch(en.phase){
+					case 1:
+						setTimeout(function(){
+							en.deadFlag = false;
+							en.health = en.getMaxHealth();
+							en.phase++;
+						},1000)
+						break;
+					case 2:
+						break;
 				}
-
 			}
 		}
 
@@ -198,26 +206,7 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 			drawEnemy();
 			checkEnemyHitCollision();
 		}
-		function drawPlayer(){
-			//sprite
-			ctx_PL.beginPath();
-			ctx_PL.fillStyle = "lime";
-			ctx_PL.arc(pl.xPos, pl.yPos, pl.radius*3, 0, 2 * Math.PI);
-			ctx_PL.fill();
-			ctx_PL.closePath();
-
-			//hitbox
-			ctx_PL.beginPath();
-			ctx_PL.fillStyle = "white";
-			ctx_PL.strokeStyle = "red";
-			ctx_PL.arc(pl.xPos, pl.yPos, pl.radius, 0, 2 * Math.PI);
-			ctx_PL.fill();
-			ctx_PL.stroke();
-			ctx_PL.closePath();
-		}
 		function drawGUI(){
-			ctx_BG.clearRect(0,0,gameWidth,gameHeight);
-
 			//==Left Side
 			ctx_BG.beginPath();
 			ctx_BG.rect(0,0,gameWidth-300,gameHeight);
@@ -252,6 +241,23 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 			ctx_BG.rect(gameWidth-270, 80, 100, 20);
 			ctx_BG.stroke();
 			ctx_BG.closePath();
+		}
+		function drawPlayer(){
+			//sprite/graze area
+			ctx_PL.beginPath();
+			ctx_PL.fillStyle = "lime";
+			ctx_PL.arc(pl.xPos, pl.yPos, pl.radius*3, 0, 2 * Math.PI);
+			ctx_PL.fill();
+			ctx_PL.closePath();
+
+			//hitbox
+			ctx_PL.beginPath();
+			ctx_PL.fillStyle = "white";
+			ctx_PL.strokeStyle = "red";
+			ctx_PL.arc(pl.xPos, pl.yPos, pl.radius, 0, 2 * Math.PI);
+			ctx_PL.fill();
+			ctx_PL.stroke();
+			ctx_PL.closePath();
 		}
 		function drawTitleScreen(){
 			ctx_BG.clearRect(0,0,gameWidth,gameHeight);
