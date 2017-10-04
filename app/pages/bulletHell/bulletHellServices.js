@@ -2,16 +2,16 @@
 
 // BULLET HELL POINT SERVICE
 app.service("BH_points", function(){
-	let current = 0;
+	function initialPoints(){
+		let current = 0;
 
-	return {
-		AddPoints: function(points){
+		this.AddPoints = function(points){
 			current += points;
 		},
-		getPoints: function(){
+		this.getPoints = function(){
 			return current;
 		},
-		getPointsPadded: function(){
+		this.getPointsPadded = function(){
 			let str = String(current);
 
 			while(str.length < 9){
@@ -20,26 +20,29 @@ app.service("BH_points", function(){
 			return str;
 		}
 	};
+	return {
+		initialPoints: initialPoints
+	};
 })
 // PLAYER SERVICE
 .service("BH_player", function(){
-	let	maxHealth = 0;
-
 	function spawnPlayer(data){
 		// Player stats
+		const	maxHealth = data.health;
+
 		this.xPos = data.position[0], this.yPos = data.position[1],
 		this.xSpd = data.speed[0], this.ySpd = data.speed[1],
-		this.health = data.health, maxHealth = data.health,
+		this.health = data.health,
 		this.shotDelay = data.shotDelay,
 		this.radius = data.radius,
 
+		// Get max health
+		this.getMaxHealth = function(){
+			return maxHealth;
+		}
 		// take damage
 		this.takeDmg = function(dmg){
 			this.health - dmg >= 0 ? this.health -= dmg : this.health = 0;
-		}
-		// Get Lives
-		this.getMaxHealth = function(){
-			return maxHealth;
 		}
 	};
 
@@ -49,12 +52,13 @@ app.service("BH_points", function(){
 })
 // ENEMY SERVICE
 .service("BH_enemy", function(){
-	let maxHealth = 0;
 	function spawnEnemy(data){
 		// enemy stats
+		const	maxHealth = data.health;
+
 		this.xPos = data.position[0], this.yPos = data.position[1],
 		this.xSpd = data.speed[0], this.ySpd = data.speed[1],
-		this.health = data.health, maxHealth = data.health,
+		this.health = data.health,
 		this.shotDelay = data.shotDelay,
 		this.radius = data.radius,
 		this.phase = 0,
@@ -103,11 +107,11 @@ app.service("BH_points", function(){
 })
 // ENEMY BULLET SERVICE
 .service("BH_enemyBullet", function(){
-	let maxSpd = 1.0;
-	let minSpd = 0.01;
-
 	function spawnBullet(data){
 		//stats
+		const maxSpd = 1.0;
+		const minSpd = 0.01;
+
 		this.xPos = data.position[0], this.yPos = data.position[1],
 		this.xSpd = data.speed[0], this.ySpd = data.speed[1],
 		this.accel = data.acceleration,
@@ -115,14 +119,13 @@ app.service("BH_points", function(){
 		this.behavior = data.behavior,
 
 		// fix direction for proper movement
-		this.magnitude = Math.sqrt(data.target[0]*data.target[0] + data.target[1]*data.target[1]),
-		this.xDir = data.target[0]/this.magnitude, this.yDir = data.target[1]/this.magnitude,
-
-		this.newTarget = function(target){
+		this.newTargetCoords = function(target){
 			this.magnitude = Math.sqrt(target[0]*target[0] + target[1]*target[1])
 			this.xDir = target[0]/this.magnitude, this.yDir = target[1]/this.magnitude
 		},
+		this.newTargetCoords(data.target),
 
+		// get speed limits
 		this.getMaxSpd = function(){
 			return maxSpd;
 		},

@@ -7,25 +7,27 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 		let ctx_BG = c_BG.getContext("2d");
 		let ctx_PL = c_PL.getContext("2d");
 		let ctx_EN = c_EN.getContext("2d");
+		let updater;
 
-		// Bullet count
-		let plBulletCount = [];
-		let enBulletCount = [];
+		// bullets & points
+		let plBulletCount = [], enBulletCount = [];
+		let enBulletImages = [];
+		let points;
 
-		// player/enemy objects
-		let pl = null;
-		let en = null;
-
-		//points
-		let points = BH_points;
-
-		//images
-		let enBulletImg1 = new Image();
-		enBulletImg1.src = "assets/images/bullethell/shot1.png";
+		// player/enemy
+		let pl, en;
 
 		// Screen Parameters
 		const gameWidth = c_BG.getAttribute('width');
 		const gameHeight = c_BG.getAttribute('height');
+
+		// enemy bullet images
+		enBulletImages.push([new Image(),"assets/images/bullethell/shot1.png"]);
+
+		enBulletImages = enBulletImages.map(function(curr,i){
+			curr[0].src = curr[1];
+			return curr[0];
+		});
 
 		// Init
 		$scope.init = function(){
@@ -54,8 +56,11 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 				shotDelay: 0
 			});
 
+			// set points
+			points = new BH_points.initialPoints();
+
 			// Animate game
-			setInterval(updateActors, 2);
+			updater = setInterval(updateGame, 1);
 		}
 
 		// Keys/Controls
@@ -189,20 +194,41 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 			}
 		}
 
+		function drawTitleScreen(){
+			ctx_BG.clearRect(0,0,gameWidth,gameHeight);
+
+			// border
+			ctx_BG.beginPath();
+			ctx_BG.rect(0,0,gameWidth,gameHeight);
+			ctx_BG.lineWidth = 1;
+			ctx_BG.stroke();
+			ctx_BG.closePath();
+
+			// title
+			ctx_BG.beginPath();
+			ctx_BG.font = "40px Comic Sans MS";
+			ctx_BG.fillText("Bullet Hell", 300, 100);
+			ctx_BG.closePath();
+		}
+
 	  // Animate game
-		function updateActors(){
+		function updateGame(){
 			ctx_BG.clearRect(0,0,gameWidth,gameHeight);
 			ctx_PL.clearRect(0,0,gameWidth,gameHeight);
 			ctx_EN.clearRect(0,0,gameWidth,gameHeight);
 
+			// user interface
 			drawGUI();
-			keyChecker();
 
+			// bullets
 			drawBullets();
 
+			// player
+			keyChecker();
 			drawPlayer();
 			checkPlayerCollision();
 
+			// enemy
 			drawEnemy();
 			checkEnemyHitCollision();
 		}
@@ -259,23 +285,6 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 			ctx_PL.stroke();
 			ctx_PL.closePath();
 		}
-		function drawTitleScreen(){
-			ctx_BG.clearRect(0,0,gameWidth,gameHeight);
-
-			// border
-			ctx_BG.beginPath();
-			ctx_BG.rect(0,0,gameWidth,gameHeight);
-			ctx_BG.lineWidth=1;
-			ctx_BG.stroke();
-			ctx_BG.closePath();
-
-			// title
-			ctx_BG.beginPath();
-			ctx_BG.font = "40px Comic Sans MS";
-			ctx_BG.fillText("Bullet Hell", 300, 100);
-			ctx_BG.closePath();
-		}
-
 		function drawEnemy(){
 			if(!en.deadFlag){
 				switch(en.phase){
@@ -431,20 +440,30 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 							bullet.yPos += bullet.yDir * bullet.ySpd;
 
 							if(bullet.xSpd === bullet.getMinSpd() || bullet.ySpd === bullet.getMinSpd()){
-								bullet.newTarget([pl.xPos - bullet.xPos, pl.yPos - bullet.yPos]);
+								bullet.newTargetCoords([pl.xPos - bullet.xPos, pl.yPos - bullet.yPos]);
 								bullet.behavior = 2;
 							}
 							break;
 					}
 
 					ctx_EN.beginPath();
-					ctx_EN.drawImage(enBulletImg1, bullet.xPos - bullet.radius, bullet.yPos - bullet.radius, bullet.radius*2, bullet.radius*2);
+					ctx_EN.drawImage(enBulletImages[0], bullet.xPos - bullet.radius, bullet.yPos - bullet.radius, bullet.radius*2, bullet.radius*2);
 					ctx_EN.closePath();
 					return true;
 				}
 				return false;
 			});
 		}
+
+		// clear objects, variables, service events on page navigation
+		$scope.$on('$locationChangeStart', function( event ) {
+			clearInterval(updater);
+			plBulletCount = [];
+			enBulletCount = [];
+    	points = null;
+			pl = null;
+			en = null;
+		});
 
 	/* simple spiral pattern formula for later
 	enemy.xPos = 250 + (enemy.xScale * Math.cos(enemy.angle * Math.PI / 180));
