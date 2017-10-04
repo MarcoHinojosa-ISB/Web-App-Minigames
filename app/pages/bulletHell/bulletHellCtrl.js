@@ -9,21 +9,41 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 		let ctx_EN = c_EN.getContext("2d");
 		let updater;
 
+		// Screen Parameters
+		const gameWidth = c_BG.getAttribute('width');
+		const gameHeight = c_BG.getAttribute('height');
+
 		// bullets & points
 		let plBulletCount = [], enBulletCount = [];
 		let enBulletImages = [];
 		let points;
 
 		// player/enemy
-		let pl, en;
+		let pl, pl_ship, en;
 
-		// Screen Parameters
-		const gameWidth = c_BG.getAttribute('width');
-		const gameHeight = c_BG.getAttribute('height');
+		// player sprite
+		function shipAnimate(path,frameT, framesPR, frameW, frameH){
+			let image = new Image();
+			image.src = path;
 
-		// enemy bullet images
+			let totalFrames = frameT, framesPerRow = framesPR;
+			let currentFrame = 0;
+			let frameWidth = frameW;
+			let frameHeight = frameH;
+
+			this.draw = function(w, h, x, y){
+				currentFrame = (currentFrame + 1) % totalFrames;
+
+				let row = Math.floor(currentFrame / framesPerRow);
+				let col = Math.floor(currentFrame % framesPerRow);
+				ctx_PL.drawImage(image, col * frameWidth, row * frameHeight, frameWidth, frameHeight, x, y, w, h);
+			}
+		}
+		// player ship image (animated)
+		pl_ship = new shipAnimate("assets/images/bullethell/ship_sprites.png", 2, 2, 212, 240);
+
+		// enemy bullet images (more to come)
 		enBulletImages.push([new Image(),"assets/images/bullethell/shot1.png"]);
-
 		enBulletImages = enBulletImages.map(function(curr,i){
 			curr[0].src = curr[1];
 			return curr[0];
@@ -122,15 +142,15 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 		// ==================COLLISIONS
 		function checkPlayerCollision(){
 			enBulletCount = enBulletCount.filter(function(bullet){
-				let distX = Math.abs(pl.xPos - bullet.xPos);
-				let distY = Math.abs(pl.yPos - bullet.yPos);
+				let dx = Math.abs(pl.xPos - bullet.xPos);
+				let dy = Math.abs(pl.yPos - bullet.yPos);
 
 				// Graze collisions
-				if(distX*distX + distY*distY <= Math.pow((pl.radius*3+bullet.radius),2)) {
+				if(dx*dx + dy*dy <= Math.pow((pl.radius*5+bullet.radius),2)) {
 					points.AddPoints(5);
 				}
 				// Hitbox collisions
-				if(distX*distX + distY*distY <= Math.pow((pl.radius*0.6+bullet.radius),2)) {
+				if(dx*dx + dy*dy <= Math.pow((pl.radius*0.4+bullet.radius),2)) {
 					pl.takeDmg(5);
 					return false;
 				}
@@ -139,17 +159,17 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 		}
 		function checkEnemyHitCollision(){
 			plBulletCount = plBulletCount.filter(function(bullet){
-				// Get vertical/horizontal distance between the centers of enemy and player bullet
-				let distX = Math.abs(en.xPos - (bullet.xPos + (bullet.width/2)));
-				let distY = Math.abs(en.yPos - (bullet.yPos + (bullet.height/2)));
+				// Get vertical/horizontal distance between the centers of enemy (circle) and player bullet (rectangle)
+				let dx = Math.abs(en.xPos - (bullet.xPos + (bullet.width/2)));
+				let dy = Math.abs(en.yPos - (bullet.yPos + (bullet.height/2)));
 
 				// No collision if distance > 50% width of enemy + player bullet
-				if (distX > (bullet.width/2 + en.radius) || distY > (bullet.height/2 + en.radius)){
+				if (dx > (bullet.width/2 + en.radius) || dy > (bullet.height/2 + en.radius)){
 					return true;
 				}
 
 				// Collision detected if distance < 50% player bullet
-		    if (distX <= (bullet.width/2) || distY <= (bullet.height/2)) {
+		    if (dx <= (bullet.width/2) || dy <= (bullet.height/2)) {
 					// No points if enemy transitioning to next phase
 					if(!en.deadFlag){
 						en.takeDmg(bullet.power);
@@ -159,8 +179,8 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 				}
 
 				// Check corners of bullet for collision
-				let dx = distX-bullet.width/2;
-  			let dy = distY-bullet.height/2;
+				dx -= bullet.width/2;
+  			dy -= bullet.height/2;
 
   			if(dx*dx + dy*dy <= (en.radius*en.radius)){
 					// No points if enemy transitioning to next phase
@@ -271,9 +291,10 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 		function drawPlayer(){
 			//sprite/graze area
 			ctx_PL.beginPath();
-			ctx_PL.fillStyle = "lime";
-			ctx_PL.arc(pl.xPos, pl.yPos, pl.radius*3, 0, 2 * Math.PI);
-			ctx_PL.fill();
+			pl_ship.draw((pl.radius*5)*2, (pl.radius*5)*2, pl.xPos - (pl.radius*5), pl.yPos - (pl.radius*5));
+			// ctx_PL.fillStyle = "lime";
+			// ctx_PL.arc(pl.xPos, pl.yPos, pl.radius*3, 0, 2 * Math.PI);
+			// ctx_PL.fill();
 			ctx_PL.closePath();
 
 			//hitbox
