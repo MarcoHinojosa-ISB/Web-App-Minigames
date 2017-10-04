@@ -2,9 +2,9 @@
 	background-color: #CCC;
 	border: 1px solid black;
 }
-#bh-screen,#bh-player,#bh-enemy,#bh-screen2{
+#bh-screen,#bh-player,#bh-enemy{
 	position: absolute;
-
+	outline: none;
 }
 #bh-start{
 	position: absolute;

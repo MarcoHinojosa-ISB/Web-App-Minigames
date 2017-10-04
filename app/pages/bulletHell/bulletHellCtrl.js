@@ -302,7 +302,7 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 						if(en.shotDelay % 10 === 0){
 							let data = new BH_enemyBullet.spawnBullet({
 								position: [en.xPos, en.yPos],
-								target: [Math.cos((en.angle+45)* (Math.PI / 180))*2, Math.sin((en.angle+45 ) * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
+								target: [Math.cos((en.angle+45) * (Math.PI / 180))*2, Math.sin((en.angle+45 ) * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
 								speed: [0.1, 0.1],
 								acceleration: 1.01,
 								radius: 5,
@@ -341,9 +341,11 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 					case 2:
 						en.shotDelay++;
 						if(en.shotDelay % 5 === 0){
+							let pivotDir = (Math.random() * 31) - 15;
+
 							let data = new BH_enemyBullet.spawnBullet({
 								position: [en.xPos, en.yPos],
-								target: [Math.cos(55 * (Math.PI / 180))*2, Math.sin(55 * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
+								target: [Math.cos((50+pivotDir) * (Math.PI / 180))*2, Math.sin(50 * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
 								speed: [3, 3],
 								acceleration: 1.05,
 								radius: 7,
@@ -352,7 +354,7 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 							enBulletCount.push(data);
 							data = new BH_enemyBullet.spawnBullet({
 								position: [en.xPos, en.yPos],
-								target: [Math.cos(125 * (Math.PI / 180))*2, Math.sin(125 * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
+								target: [Math.cos((130+pivotDir) * (Math.PI / 180))*2, Math.sin(130 * (Math.PI / 180)) * 2],//[pl.xPos - en.xPos, pl.yPos - en.yPos],
 								speed: [3, 3],
 								acceleration: 1.05,
 								radius: 7,
