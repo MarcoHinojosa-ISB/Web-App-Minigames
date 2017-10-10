@@ -1,3 +1,3 @@
 "# Games made in HTML5/Angularjs" 
 
-"Uses Node.js. Use nodemon (npm install) to start server after installing modules/components"
+"Runs on Node.js. Use nodemon or 'npm start' command to start server after installing modules/components"
