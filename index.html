@@ -6,12 +6,11 @@
 	<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
 	<script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
 	<script type="text/javascript" src="/bower_components/angular-route/angular-route.min.js"></script>
-	<link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+
 
 	<!-- stylesheets -->
-	<link rel="stylesheet" href="assets/css/main.css">
-	<link rel="stylesheet" href="/app/partials/headerStyle.css">
-	<link rel="stylesheet" href="/app/partials/sidebarStyle.css">
+  <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/assets/css/main.css">
 	<link rel="stylesheet" href="/app/pages/home/homeStyle.css">
 	<link rel="stylesheet" href="/app/pages/bulletHell/bulletHellStyle.css">
 
@@ -24,9 +23,13 @@
 		<div class="col-md-12" id="header" ng-include="'app/partials/headerView.html'"></div>
 	</div>
 	<div class="row">
-		<div class="col-md-3" id="sidebar" ng-include="'app/partials/sidebarView.html'"></div>
-		<div class="col-md-9" id="content" ng-view></div>
+		<div class="col-md-12" id="menubar" ng-include="'app/partials/menubarView.html'"></div>
 	</div>
+  <div class="row">
+    <div class="col-md-12">
+      <div id="content" ng-view></div>
+    </div>
+  </div>
 </body>
 
 <!-- controllers -->
@@ -34,6 +37,5 @@
 <script type="text/javascript" src="/app/pages/home/homeCtrl.js"></script>
 <script type="text/javascript" src="/app/pages/bulletHell/bulletHellCtrl.js"></script>
 <script type="text/javascript" src="/app/pages/bulletHell/bulletHellServices.js"></script>
-<script type="text/javascript" src="/app/partials/headerCtrl.js"></script>
 
 </html>

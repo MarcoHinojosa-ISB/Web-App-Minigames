@@ -2,21 +2,32 @@
 	background-color: #CCC;
 	border: 1px solid black;
 }
-#bh-screen,#bh-player,#bh-enemy{
+
+#canvas-container{
+	position: relative;
+	left: 0;
+	right: 0;
+	margin-left: auto;
+ 	margin-right: auto;
+	max-width: 800px;
+}
+#bh-screen, #bh-player, #bh-enemy{
 	position: absolute;
-	outline: none;
 }
 #bh-start{
+	text-align: center;
+}
+#bh-start > input{
 	position: absolute;
-	left: 350px;
-	top: 150px;
+	margin-left: -30px;
+	margin-top: 150px;
 	background-color: #AFF;
 	border: 2px solid #000;
-	border-radius: 8px;
+	border-radius: 10px;
 	font-size: 25px;
-	padding: 1px 20px 1px 20px;
+
 	z-index: 1;
 }
-#bh-start:hover{
+#bh-start > input:hover{
 	border-color: #666;
 }
