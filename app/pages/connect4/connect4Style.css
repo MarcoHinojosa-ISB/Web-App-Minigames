@@ -1,0 +1,26 @@
+#c4-rack{
+  display:inline-block;
+  border: 10px solid #555555;
+  border-radius: 5px;
+}
+#c4-rack > div{
+  font-size: 0;
+}
+.c4-space{
+  display: inline-block;
+  background-color: rgb(245,245,0);
+  width: 80px;
+  height: 80px;
+}
+.open, .filled{
+  position: relative;
+  left: 5px;
+  top: 5px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  z-index: 1;
+}
+.open{
+  background-color: #fefefe;
+}
