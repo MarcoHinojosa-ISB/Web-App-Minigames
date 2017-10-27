@@ -1,10 +1,15 @@
 #c4-rack{
-  display:inline-block;
+  display: inline-block;
   border: 10px solid #555555;
   border-radius: 5px;
+  font-size: 0;
 }
 #c4-rack > div{
-  font-size: 0;
+  display: inline-block;
+  width: 80px;
+}
+#c4-rack > div:hover{
+  opacity: 0.6;
 }
 .c4-space{
   display: inline-block;
@@ -12,7 +17,7 @@
   width: 80px;
   height: 80px;
 }
-.open, .filled{
+.c4-space > div{
   position: relative;
   left: 5px;
   top: 5px;
@@ -21,6 +26,12 @@
   border-radius: 50%;
   z-index: 1;
 }
-.open{
+.open > div{
   background-color: #fefefe;
+}
+.filled-red > div{
+  background-color: red;
+}
+.filled-black > div{
+  background-color: #000000;
 }
