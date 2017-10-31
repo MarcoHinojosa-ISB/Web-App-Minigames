@@ -1,14 +1,30 @@
 <div ng-init="init()">
   <div class="text-center">
     <h1>Connect 4 Game</h1>
+
     <div id="c4-rack">
-      <div id="c4-col-0" ng-click="playerWait||insertChip($event)"></div>
-      <div id="c4-col-1" ng-click="playerWait||insertChip($event)"></div>
-      <div id="c4-col-2" ng-click="playerWait||insertChip($event)"></div>
-      <div id="c4-col-3" ng-click="playerWait||insertChip($event)"></div>
-      <div id="c4-col-4" ng-click="playerWait||insertChip($event)"></div>
-      <div id="c4-col-5" ng-click="playerWait||insertChip($event)"></div>
-      <div id="c4-col-6" ng-click="playerWait||insertChip($event)"></div>
+      <div id="c4-col-0" ng-click="playerWait || insertToken($event)"></div>
+      <div id="c4-col-1" ng-click="playerWait || insertToken($event)"></div>
+      <div id="c4-col-2" ng-click="playerWait || insertToken($event)"></div>
+      <div id="c4-col-3" ng-click="playerWait || insertToken($event)"></div>
+      <div id="c4-col-4" ng-click="playerWait || insertToken($event)"></div>
+      <div id="c4-col-5" ng-click="playerWait || insertToken($event)"></div>
+      <div id="c4-col-6" ng-click="playerWait || insertToken($event)"></div>
+    </div>
+    <div id="dialog-box">
+      <div id="select-token">
+        <h3>Choose token color</h3>
+        <button id="token-red" class="btn" ng-click="playerColorSelected('red','black')">R</button>
+        <button id="token-black" class="btn" ng-click="playerColorSelected('black','red')">B</button>
+      </div>
+      <div id="game-in-progress">
+        <h2>Game in Progress...</h2>
+      </div>
+      <div id="play-again">
+        <h3 ng-show="winner !== 'tie'">{{ winner }} wins!</h3>
+        <h3 ng-show="winner.length === 'tie'">It's a tie!</h3>
+        <button class="btn btn-success" ng-click="restart()">Restart Game</button>
+      </div>
     </div>
   </div>
 </div>

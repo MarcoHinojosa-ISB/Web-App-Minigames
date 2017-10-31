@@ -1,9 +1,12 @@
+/* rack */
 #c4-rack{
-  display: inline-block;
+  margin: 0 auto;
+  width: 580px;
   border: 10px solid #555555;
-  border-radius: 5px;
   font-size: 0;
 }
+
+/* rack columns */
 #c4-rack > div{
   display: inline-block;
   width: 80px;
@@ -11,6 +14,13 @@
 #c4-rack > div:hover{
   opacity: 0.6;
 }
+
+/* gray out columns */
+.gray-out{
+  opacity: 0.6;
+}
+
+/* rack spaces */
 .c4-space{
   display: inline-block;
   background-color: rgb(245,245,0);
@@ -29,9 +39,33 @@
 .open > div{
   background-color: #fefefe;
 }
+
+/* token */
 .filled-red > div{
   background-color: red;
 }
 .filled-black > div{
   background-color: #000000;
+}
+
+/* text */
+#dialog-box{
+  display: inline-block;
+  width: 580px;
+  padding-bottom: 10px;
+  border-left: 10px solid #555555;
+  border-bottom: 10px solid #555555;
+  border-right: 10px solid #555555;
+  background-color: #eeeeee;
+}
+#dialog-box > div{
+  display: none;
+}
+#token-red{
+  background-color: red; color: #ffffff;
+  border-radius: 50%;
+}
+#token-black{
+  background-color: black; color: #ffffff;
+  border-radius: 50%;
 }
