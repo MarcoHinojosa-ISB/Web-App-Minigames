@@ -1,0 +1,33 @@
+body{
+	background-color: #D3DBB2;
+}
+
+/* header */
+#header-title{
+	font-family: "Arial Black", Gadget, sans-serif;
+	font-size: 40px;
+	text-align: center;
+}
+
+/* menubar */
+#header-menu{
+	background-color: #ffffff;
+	font-family: Verdana, Geneva, sans-serif;
+	font-size: 20px;
+	border-radius: 10px;
+	padding-left: 0px;
+
+	height: 50px;
+	margin-bottom: 10px;
+}
+#header-menu a{
+	color: #000000;
+}
+#header-menu a li{
+	display: inline-block;
+	padding: 11px 15px 11px 15px;
+	transition: 0.3s;
+}
+#header-menu a:hover li{
+	background-color: #eeeeee;
+}

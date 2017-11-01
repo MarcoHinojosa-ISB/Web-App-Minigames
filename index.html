@@ -7,11 +7,10 @@
   <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
 	<script type="text/javascript" src="/bower_components/angular-route/angular-route.min.js"></script>
-
+  <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
 
 	<!-- stylesheets -->
-  <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" href="/assets/css/main.css">
+	<link rel="stylesheet" href="/app/partials/headerStyle.css">
 	<link rel="stylesheet" href="/app/pages/home/homeStyle.css">
 	<link rel="stylesheet" href="/app/pages/bulletHell/bulletHellStyle.css">
   <link rel="stylesheet" href="/app/pages/connect4/connect4Style.css">
@@ -20,12 +19,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body ng-app="inventory" class="container">
-	<div class="row">
-		<div class="col-md-12" id="header" ng-include="'app/partials/headerView.html'"></div>
-	</div>
-	<div class="row">
-		<div class="col-md-12" id="menubar" ng-include="'app/partials/menubarView.html'"></div>
-	</div>
+	<div ng-include="'app/partials/headerView.html'"></div>
+
   <div class="row">
     <div class="col-md-12">
       <div id="content" ng-view></div>
