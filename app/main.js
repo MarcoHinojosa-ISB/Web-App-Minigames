@@ -1,4 +1,17 @@
-var app = angular.module('inventory', ['ngRoute']);
+
+app = angular.module('inventory', ['ngRoute']);
+
+//call page styles
+require("./partials/headerStyle.css");
+require("./pages/home/homeStyle.css");
+require("./pages/bulletHell/bulletHellStyle.css");
+require("./pages/connect4/connect4Style.css");
+
+//call angularjs controllers, services
+require("./pages/home/homeCtrl.js");
+require("./pages/bulletHell/bulletHellCtrl.js");
+require("./pages/connect4/connect4Ctrl.js");
+require("./pages/bulletHell/bulletHellServices.js");
 
 app.config(function($locationProvider, $routeProvider){
   $routeProvider
@@ -17,6 +30,6 @@ app.config(function($locationProvider, $routeProvider){
     .otherwise({
       redirectTo: '/'
     });
-    
+
   $locationProvider.html5Mode(true);
 });
