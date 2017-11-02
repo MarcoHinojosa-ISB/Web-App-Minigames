@@ -1,5 +1,5 @@
 {
-  "name": "inventory",
+  "name": "web-app-minigames",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -16,8 +16,8 @@
     "serve-favicon": "~2.3.0"
   },
   "devDependencies": {
-    "webpack": "^3.8.1",
     "css-loader": "^0.28.7",
-    "style-loader": "^0.19.0"
+    "style-loader": "^0.19.0",
+    "webpack": "^3.8.1"
   }
 }
