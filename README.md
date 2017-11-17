@@ -1,3 +1,9 @@
 "# Games made in HTML5/Angularjs" 
 
-"Runs on Node.js. Use nodemon or 'npm start' command to start server after installing modules/components"
+Runs on Node.js
+
+To get started:
+-run 'npm install'
+-run 'bower install'
+-run 'npm start' to start server
+-on seperate window, run 'webpack' to update changes
