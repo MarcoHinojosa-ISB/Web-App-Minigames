@@ -15,8 +15,7 @@ body{
 	font-family: Verdana, Geneva, sans-serif;
 	font-size: 20px;
 	border-radius: 10px;
-	padding-left: 0px;
-
+	padding-left: 5px;
 	height: 50px;
 	margin-bottom: 10px;
 }
@@ -24,8 +23,9 @@ body{
 	color: #000000;
 }
 #header-menu a li{
-	display: inline-block;
-	padding: 11px 15px 11px 15px;
+	float: left;
+	list-style-type: none;
+	padding: 11px;
 	transition: 0.3s;
 }
 #header-menu a:hover li{

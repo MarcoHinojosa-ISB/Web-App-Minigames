@@ -1,3 +1,5 @@
+// Main.js is the entry point for webpack. All JS and CSS created for this application will be
+// called here and bundled together
 
 app = angular.module('inventory', ['ngRoute']);
 

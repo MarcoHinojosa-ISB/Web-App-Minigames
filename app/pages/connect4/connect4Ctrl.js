@@ -10,8 +10,8 @@ app.controller('connect4Ctrl', function($scope, $timeout){
     rack = [];
     cpuTurn = false;
 
-    $("#c4-rack").children("div").addClass("gray-out");
-    $("#select-token").css("display","block");
+    $("#c4-rack").children("div").addClass("c4-gray-out");
+    $("#c4-select-token").css("display","block");
 
     for(let r=0; r<6; r++){
       rack.push([]);
@@ -36,13 +36,13 @@ app.controller('connect4Ctrl', function($scope, $timeout){
       }
     }
 
-    $("#play-again").css("display","none");
-    $("#select-token").css("display","block");
+    $("#c4-play-again").css("display","none");
+    $("#c4-select-token").css("display","block");
   }
 
   // Insert token into rack
   $scope.insertToken = function(e){
-    let c = parseInt(e.currentTarget.id.substr(-1)); //id,index of selected column
+    let c = parseInt(e.currentTarget.id.substr(-1)); //id, index of selected column
     let rows = e.currentTarget.children; //rows in selected column
     let winFlag = false;
 
@@ -73,17 +73,17 @@ app.controller('connect4Ctrl', function($scope, $timeout){
       $scope.playerWait = true;
       $scope.winner = !cpuTurn ? "Player 1 (you)" : "Player 2 (CPU)";
 
-      $("#c4-rack").children("div").addClass("gray-out");
-      $("#game-in-progress").css("display","none");
-      $("#play-again").css("display","block");
+      $("#c4-rack").children("div").addClass("c4-gray-out");
+      $("#c4-game-in-progress").css("display","none");
+      $("#c4-play-again").css("display","block");
     }
     else if(rack[0].indexOf(0) === -1){
       $scope.playerWait = true;
       $scope.winner = "tie";
 
-      $("#c4-rack").children("div").addClass("gray-out");
-      $("#game-in-progress").css("display","none");
-      $("#play-again").css("display","block");
+      $("#c4-rack").children("div").addClass("c4-gray-out");
+      $("#c4-game-in-progress").css("display","none");
+      $("#c4-play-again").css("display","block");
     }
     else if(cpuTurn){
       $scope.playerWait = true;
@@ -96,9 +96,9 @@ app.controller('connect4Ctrl', function($scope, $timeout){
     cpuColor = other;
 
     $scope.playerWait = false;
-    $("#c4-rack").children("div").removeClass("gray-out");
-    $("#select-token").css("display","none");
-    $("#game-in-progress").css("display","block");
+    $("#c4-rack").children("div").removeClass("c4-gray-out");
+    $("#c4-select-token").css("display","none");
+    $("#c4-game-in-progress").css("display","block");
   }
 
   function cpuDecision(){

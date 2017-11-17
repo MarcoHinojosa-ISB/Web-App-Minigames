@@ -16,7 +16,7 @@
 }
 
 /* gray out columns */
-.gray-out{
+.c4-gray-out{
   opacity: 0.6;
 }
 
@@ -49,7 +49,7 @@
 }
 
 /* text */
-#dialog-box{
+#c4-dialog-box{
   display: inline-block;
   width: 580px;
   padding-bottom: 10px;
@@ -58,14 +58,14 @@
   border-right: 10px solid #555555;
   background-color: #eeeeee;
 }
-#dialog-box > div{
+#c4-dialog-box > div{
   display: none;
 }
-#token-red{
+#c4-token-red{
   background-color: red; color: #ffffff;
   border-radius: 50%;
 }
-#token-black{
+#c4-token-black{
   background-color: black; color: #ffffff;
   border-radius: 50%;
 }

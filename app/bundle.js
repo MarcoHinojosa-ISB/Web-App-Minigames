@@ -521,6 +521,8 @@ function updateLink (link, options, obj) {
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
+// Main.js is the entry point for webpack. All JS and CSS created for this application will be
+// called here and bundled together
 
 app = angular.module('inventory', ['ngRoute']);
 
@@ -598,7 +600,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "body{\r\n\tbackground-color: #D3DBB2;\r\n}\r\n\r\n/* header */\r\n#header-title{\r\n\tfont-family: \"Arial Black\", Gadget, sans-serif;\r\n\tfont-size: 40px;\r\n\ttext-align: center;\r\n}\r\n\r\n/* menubar */\r\n#header-menu{\r\n\tbackground-color: #ffffff;\r\n\tfont-family: Verdana, Geneva, sans-serif;\r\n\tfont-size: 20px;\r\n\tborder-radius: 10px;\r\n\tpadding-left: 0px;\r\n\r\n\theight: 50px;\r\n\tmargin-bottom: 10px;\r\n}\r\n#header-menu a{\r\n\tcolor: #000000;\r\n}\r\n#header-menu a li{\r\n\tdisplay: inline-block;\r\n\tpadding: 11px 15px 11px 15px;\r\n\ttransition: 0.3s;\r\n}\r\n#header-menu a:hover li{\r\n\tbackground-color: #eeeeee;\r\n}\r\n", ""]);
+exports.push([module.i, "body{\r\n\tbackground-color: #D3DBB2;\r\n}\r\n\r\n/* header */\r\n#header-title{\r\n\tfont-family: \"Arial Black\", Gadget, sans-serif;\r\n\tfont-size: 40px;\r\n\ttext-align: center;\r\n}\r\n\r\n/* menubar */\r\n#header-menu{\r\n\tbackground-color: #ffffff;\r\n\tfont-family: Verdana, Geneva, sans-serif;\r\n\tfont-size: 20px;\r\n\tborder-radius: 10px;\r\n\tpadding-left: 5px;\r\n\theight: 50px;\r\n\tmargin-bottom: 10px;\r\n}\r\n#header-menu a{\r\n\tcolor: #000000;\r\n}\r\n#header-menu a li{\r\n\tfloat: left;\r\n\tlist-style-type: none;\r\n\tpadding: 11px;\r\n\ttransition: 0.3s;\r\n}\r\n#header-menu a:hover li{\r\n\tbackground-color: #eeeeee;\r\n}\r\n", ""]);
 
 // exports
 
@@ -783,7 +785,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "#bh-screen{\r\n\tbackground-color: #CCC;\r\n\tborder: 1px solid black;\r\n}\r\n\r\n#canvas-container{\r\n\tposition: relative;\r\n\tleft: 0;\r\n\tright: 0;\r\n\tmargin-left: auto;\r\n \tmargin-right: auto;\r\n\tmax-width: 800px;\r\n}\r\n#bh-screen, #bh-player, #bh-enemy{\r\n\tposition: absolute;\r\n}\r\n#bh-start{\r\n\ttext-align: center;\r\n}\r\n#bh-start > input{\r\n\tposition: absolute;\r\n\tmargin-left: -30px;\r\n\tmargin-top: 150px;\r\n\tbackground-color: #AFF;\r\n\tborder: 2px solid #000;\r\n\tborder-radius: 10px;\r\n\tfont-size: 25px;\r\n\r\n\tz-index: 1;\r\n}\r\n#bh-start > input:hover{\r\n\tborder-color: #666;\r\n}\r\n", ""]);
+exports.push([module.i, "#bh-screen{\r\n\tbackground-color: #CCC;\r\n\tborder: 1px solid black;\r\n}\r\n\r\n#bh-canvas-container{\r\n\tposition: relative;\r\n\tleft: 0;\r\n\tright: 0;\r\n\tmargin-left: auto;\r\n \tmargin-right: auto;\r\n\tmax-width: 800px;\r\n}\r\n#bh-screen, #bh-player, #bh-enemy{\r\n\tposition: absolute;\r\n}\r\n#bh-start{\r\n\tposition: absolute;\r\n\tmargin-left: -30px;\r\n\ttop: 150px;\r\n\tbackground-color: #AFF;\r\n\tborder: 2px solid #000;\r\n\tborder-radius: 10px;\r\n\tfont-size: 25px;\r\n\r\n\tz-index: 1;\r\n}\r\n#bh-start:hover{\r\n\tborder-color: #666;\r\n}\r\n", ""]);
 
 // exports
 
@@ -828,7 +830,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "/* rack */\r\n#c4-rack{\r\n  margin: 0 auto;\r\n  width: 580px;\r\n  border: 10px solid #555555;\r\n  font-size: 0;\r\n}\r\n\r\n/* rack columns */\r\n#c4-rack > div{\r\n  display: inline-block;\r\n  width: 80px;\r\n}\r\n#c4-rack > div:hover{\r\n  opacity: 0.6;\r\n}\r\n\r\n/* gray out columns */\r\n.gray-out{\r\n  opacity: 0.6;\r\n}\r\n\r\n/* rack spaces */\r\n.c4-space{\r\n  display: inline-block;\r\n  background-color: rgb(245,245,0);\r\n  width: 80px;\r\n  height: 80px;\r\n}\r\n.c4-space > div{\r\n  position: relative;\r\n  left: 5px;\r\n  top: 5px;\r\n  width: 70px;\r\n  height: 70px;\r\n  border-radius: 50%;\r\n  z-index: 1;\r\n}\r\n.open > div{\r\n  background-color: #fefefe;\r\n}\r\n\r\n/* token */\r\n.filled-red > div{\r\n  background-color: red;\r\n}\r\n.filled-black > div{\r\n  background-color: #000000;\r\n}\r\n\r\n/* text */\r\n#dialog-box{\r\n  display: inline-block;\r\n  width: 580px;\r\n  padding-bottom: 10px;\r\n  border-left: 10px solid #555555;\r\n  border-bottom: 10px solid #555555;\r\n  border-right: 10px solid #555555;\r\n  background-color: #eeeeee;\r\n}\r\n#dialog-box > div{\r\n  display: none;\r\n}\r\n#token-red{\r\n  background-color: red; color: #ffffff;\r\n  border-radius: 50%;\r\n}\r\n#token-black{\r\n  background-color: black; color: #ffffff;\r\n  border-radius: 50%;\r\n}\r\n", ""]);
+exports.push([module.i, "/* rack */\r\n#c4-rack{\r\n  margin: 0 auto;\r\n  width: 580px;\r\n  border: 10px solid #555555;\r\n  font-size: 0;\r\n}\r\n\r\n/* rack columns */\r\n#c4-rack > div{\r\n  display: inline-block;\r\n  width: 80px;\r\n}\r\n#c4-rack > div:hover{\r\n  opacity: 0.6;\r\n}\r\n\r\n/* gray out columns */\r\n.c4-gray-out{\r\n  opacity: 0.6;\r\n}\r\n\r\n/* rack spaces */\r\n.c4-space{\r\n  display: inline-block;\r\n  background-color: rgb(245,245,0);\r\n  width: 80px;\r\n  height: 80px;\r\n}\r\n.c4-space > div{\r\n  position: relative;\r\n  left: 5px;\r\n  top: 5px;\r\n  width: 70px;\r\n  height: 70px;\r\n  border-radius: 50%;\r\n  z-index: 1;\r\n}\r\n.open > div{\r\n  background-color: #fefefe;\r\n}\r\n\r\n/* token */\r\n.filled-red > div{\r\n  background-color: red;\r\n}\r\n.filled-black > div{\r\n  background-color: #000000;\r\n}\r\n\r\n/* text */\r\n#c4-dialog-box{\r\n  display: inline-block;\r\n  width: 580px;\r\n  padding-bottom: 10px;\r\n  border-left: 10px solid #555555;\r\n  border-bottom: 10px solid #555555;\r\n  border-right: 10px solid #555555;\r\n  background-color: #eeeeee;\r\n}\r\n#c4-dialog-box > div{\r\n  display: none;\r\n}\r\n#c4-token-red{\r\n  background-color: red; color: #ffffff;\r\n  border-radius: 50%;\r\n}\r\n#c4-token-black{\r\n  background-color: black; color: #ffffff;\r\n  border-radius: 50%;\r\n}\r\n", ""]);
 
 // exports
 
@@ -1366,8 +1368,8 @@ app.controller('connect4Ctrl', function($scope, $timeout){
     rack = [];
     cpuTurn = false;
 
-    $("#c4-rack").children("div").addClass("gray-out");
-    $("#select-token").css("display","block");
+    $("#c4-rack").children("div").addClass("c4-gray-out");
+    $("#c4-select-token").css("display","block");
 
     for(let r=0; r<6; r++){
       rack.push([]);
@@ -1392,13 +1394,13 @@ app.controller('connect4Ctrl', function($scope, $timeout){
       }
     }
 
-    $("#play-again").css("display","none");
-    $("#select-token").css("display","block");
+    $("#c4-play-again").css("display","none");
+    $("#c4-select-token").css("display","block");
   }
 
   // Insert token into rack
   $scope.insertToken = function(e){
-    let c = parseInt(e.currentTarget.id.substr(-1)); //id,index of selected column
+    let c = parseInt(e.currentTarget.id.substr(-1)); //id, index of selected column
     let rows = e.currentTarget.children; //rows in selected column
     let winFlag = false;
 
@@ -1429,17 +1431,17 @@ app.controller('connect4Ctrl', function($scope, $timeout){
       $scope.playerWait = true;
       $scope.winner = !cpuTurn ? "Player 1 (you)" : "Player 2 (CPU)";
 
-      $("#c4-rack").children("div").addClass("gray-out");
-      $("#game-in-progress").css("display","none");
-      $("#play-again").css("display","block");
+      $("#c4-rack").children("div").addClass("c4-gray-out");
+      $("#c4-game-in-progress").css("display","none");
+      $("#c4-play-again").css("display","block");
     }
     else if(rack[0].indexOf(0) === -1){
       $scope.playerWait = true;
       $scope.winner = "tie";
 
-      $("#c4-rack").children("div").addClass("gray-out");
-      $("#game-in-progress").css("display","none");
-      $("#play-again").css("display","block");
+      $("#c4-rack").children("div").addClass("c4-gray-out");
+      $("#c4-game-in-progress").css("display","none");
+      $("#c4-play-again").css("display","block");
     }
     else if(cpuTurn){
       $scope.playerWait = true;
@@ -1452,9 +1454,9 @@ app.controller('connect4Ctrl', function($scope, $timeout){
     cpuColor = other;
 
     $scope.playerWait = false;
-    $("#c4-rack").children("div").removeClass("gray-out");
-    $("#select-token").css("display","none");
-    $("#game-in-progress").css("display","block");
+    $("#c4-rack").children("div").removeClass("c4-gray-out");
+    $("#c4-select-token").css("display","none");
+    $("#c4-game-in-progress").css("display","block");
   }
 
   function cpuDecision(){

@@ -3,7 +3,7 @@
 	border: 1px solid black;
 }
 
-#canvas-container{
+#bh-canvas-container{
 	position: relative;
 	left: 0;
 	right: 0;
@@ -15,12 +15,9 @@
 	position: absolute;
 }
 #bh-start{
-	text-align: center;
-}
-#bh-start > input{
 	position: absolute;
 	margin-left: -30px;
-	margin-top: 150px;
+	top: 150px;
 	background-color: #AFF;
 	border: 2px solid #000;
 	border-radius: 10px;
@@ -28,6 +25,6 @@
 
 	z-index: 1;
 }
-#bh-start > input:hover{
+#bh-start:hover{
 	border-color: #666;
 }
