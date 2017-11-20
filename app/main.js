@@ -8,11 +8,13 @@ require("./partials/headerStyle.css");
 require("./pages/home/homeStyle.css");
 require("./pages/bulletHell/bulletHellStyle.css");
 require("./pages/connect4/connect4Style.css");
+require("./pages/tetris/tetrisStyle.css");
 
 //call angularjs controllers, services
 require("./pages/home/homeCtrl.js");
 require("./pages/bulletHell/bulletHellCtrl.js");
 require("./pages/connect4/connect4Ctrl.js");
+require("./pages/tetris/tetrisCtrl.js");
 require("./pages/bulletHell/bulletHellServices.js");
 
 app.config(function($locationProvider, $routeProvider){
@@ -28,6 +30,10 @@ app.config(function($locationProvider, $routeProvider){
     .when('/connect-4', {
       templateUrl: 'app/pages/connect4/connect4View.html',
       controller: 'connect4Ctrl'
+    })
+    .when('/tetris', {
+      templateUrl: 'app/pages/tetris/tetrisView.html',
+      controller: 'tetrisCtrl'
     })
     .otherwise({
       redirectTo: '/'

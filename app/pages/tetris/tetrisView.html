@@ -1,0 +1,10 @@
+<div ng-init="init()" class="text-center">
+  <h1>Tetris</h1>
+  <div id="tetris-screen">
+    <div id="tetris-blockField" >
+      <div ng-repeat="blkRow in blockField track by $index">
+        <div ng-repeat="blk in blkRow track by $index" class="tetris-blk-{{blk}}"></div>
+      </div>
+    </div>
+  </div>
+</div>

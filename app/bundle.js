@@ -531,11 +531,13 @@ __webpack_require__(3);
 __webpack_require__(6);
 __webpack_require__(8);
 __webpack_require__(10);
+__webpack_require__(17);
 
 //call angularjs controllers, services
 __webpack_require__(12);
 __webpack_require__(13);
 __webpack_require__(14);
+__webpack_require__(16);
 __webpack_require__(15);
 
 app.config(function($locationProvider, $routeProvider){
@@ -551,6 +553,10 @@ app.config(function($locationProvider, $routeProvider){
     .when('/connect-4', {
       templateUrl: 'app/pages/connect4/connect4View.html',
       controller: 'connect4Ctrl'
+    })
+    .when('/tetris', {
+      templateUrl: 'app/pages/tetris/tetrisView.html',
+      controller: 'tetrisCtrl'
     })
     .otherwise({
       redirectTo: '/'
@@ -1687,6 +1693,163 @@ app.service("BH_points", function(){
 		spawnBullet: spawnBullet
 	};
 })
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+app.controller("tetrisCtrl", function($scope){
+  // block field is 20 rows, 10 cols
+  $scope.blockField = [];
+  let rowSize = 20;
+  let colSize = 10;
+
+  /* ID: shape/color
+  ===============
+  0: "EMPTY"/black;
+  1: Z/red;
+  2: S/blue;
+  3: T/purple;
+  4: L/green;
+  5: Reverse-L/orange;
+  6: Line/light-blue;
+  7: Box/yellow;
+  ===============*/
+  let blk_structure = {
+    1: [[0,3],[0,4],[1,4],[1,5]],
+    2: [[0,4],[0,5],[1,3],[1,4]],
+    3: [[0,4],[1,3],[1,4],[1,5]],
+    4: [[0,4],[1,4],[2,4],[2,5]],
+    5: [[0,4],[1,4],[2,4],[2,3]],
+    6: [[0,3],[0,4],[0,5],[0,6]],
+    7: [[0,4],[0,5],[1,4],[1,5]]
+  }
+
+  let blk, blkColor;
+
+  $scope.init = function(){
+    for(let r=0; r<rowSize; r++){
+      $scope.blockField.push([]);
+      for(let c=0; c<colSize; c++){
+        $scope.blockField[r].push(0);
+      }
+    }
+
+    getNewBlock();
+    gameStart();
+  }
+
+  function gameStart(){
+    let blkFall = setInterval(function(){
+      let bottomReached = false;
+
+      // check if the tiles of the block reached the bottom
+      for(let i=0; i<blk.length; i++){
+        if(blk[i][0] + 1 === 20){
+          bottomReached = true;
+          break;
+        }
+        if($scope.blockField[ blk[i][0] + 1 ][ blk[i][1] ] !== 0){
+          if(!checkTileExists([blk[i][0] + 1, blk[i][1]])){
+            bottomReached = true;
+            break;
+          }
+        }
+      }
+
+      if(!bottomReached){
+        for(let i=0; i<blk.length; i++){
+          $scope.blockField[ blk[i][0] ][ blk[i][1] ] = 0;
+        }
+
+        for(let i=0; i<blk.length; i++){
+          blk[i][0]++;
+          $scope.blockField[ blk[i][0] ][ blk[i][1] ] = blkColor;
+        }
+      }
+      else{
+        getNewBlock();
+      }
+      $scope.$apply();
+    }, 100);
+  }
+
+  function checkTileExists(tmp){
+    let tileExists = false;
+
+    for(let j=0; j<blk.length; j++){
+      if(blk[j][0] === tmp[0] && blk[j][1] === tmp[1]){
+        tileExists = true;
+        break;
+      }
+    }
+
+    return tileExists;
+  }
+
+  // get random block
+  function getNewBlock(){
+    blkColor = Math.ceil(Math.random()*7);
+    blk = [];
+
+    for(let i=0; i<blk_structure[ blkColor ].length; i++){
+      blk.push(blk_structure[ blkColor ][i].slice(0));
+    }
+
+    for(let i=0; i<blk.length; i++){
+      $scope.blockField[ blk[i][0] ][ blk[i][1] ] = blkColor;
+    }
+  }
+})
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(18);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./tetrisStyle.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./tetrisStyle.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "#tetris-screen{\r\n\r\n\r\n  position: relative;\r\n  width: 400px;\r\n  height: 402px;\r\n  border: 1px solid black;\r\n  margin: 0 auto;\r\n}\r\n#tetris-blockField{\r\n\r\n\r\n  position:absolute;\r\n  height: 100%;\r\n  width: 202px;\r\n  background-color: black;\r\n\r\n  /* to fix inline-block space */\r\n  font-size: 0px;\r\n}\r\n#tetris-blockField > div > div{\r\n  display: inline-block;\r\n  border: 1px solid black;\r\n  width: 20px;\r\n  height: 20px;\r\n}\r\n\r\n.tetris-blk-1{\r\n  background-color: red;\r\n}\r\n.tetris-blk-2{\r\n  background-color: blue;\r\n}\r\n.tetris-blk-3{\r\n  background-color: violet;\r\n}\r\n.tetris-blk-4{\r\n  background-color: green;\r\n}\r\n.tetris-blk-5{\r\n  background-color: orange;\r\n}\r\n.tetris-blk-6{\r\n  background-color: cyan;\r\n}\r\n.tetris-blk-7{\r\n  background-color: yellow;\r\n}\r\n", ""]);
+
+// exports
 
 
 /***/ })
