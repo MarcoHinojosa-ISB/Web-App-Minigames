@@ -531,14 +531,14 @@ __webpack_require__(3);
 __webpack_require__(6);
 __webpack_require__(8);
 __webpack_require__(10);
-__webpack_require__(17);
+__webpack_require__(12);
 
 //call angularjs controllers, services
-__webpack_require__(12);
-__webpack_require__(13);
 __webpack_require__(14);
-__webpack_require__(16);
 __webpack_require__(15);
+__webpack_require__(16);
+__webpack_require__(17);
+__webpack_require__(18);
 
 app.config(function($locationProvider, $routeProvider){
   $routeProvider
@@ -791,7 +791,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "#bh-screen{\r\n\tbackground-color: #CCC;\r\n\tborder: 1px solid black;\r\n}\r\n\r\n#bh-canvas-container{\r\n\tposition: relative;\r\n\tleft: 0;\r\n\tright: 0;\r\n\tmargin-left: auto;\r\n \tmargin-right: auto;\r\n\tmax-width: 800px;\r\n}\r\n#bh-screen, #bh-player, #bh-enemy{\r\n\tposition: absolute;\r\n}\r\n#bh-start{\r\n\tposition: absolute;\r\n\tmargin-left: -30px;\r\n\ttop: 150px;\r\n\tbackground-color: #AFF;\r\n\tborder: 2px solid #000;\r\n\tborder-radius: 10px;\r\n\tfont-size: 25px;\r\n\r\n\tz-index: 1;\r\n}\r\n#bh-start:hover{\r\n\tborder-color: #666;\r\n}\r\n", ""]);
+exports.push([module.i, "#bh-screen{\r\n\tbackground-color: #CCC;\r\n\tborder: 1px solid black;\r\n}\r\n\r\n#bh-canvas-container{\r\n\tposition: relative;\r\n\tleft: 0;\r\n\tright: 0;\r\n\tmargin-left: auto;\r\n \tmargin-right: auto;\r\n\tmax-width: 800px;\r\n}\r\n#bh-screen, #bh-player, #bh-enemy{\r\n\tposition: absolute;\r\n}\r\n#bh-screen:focus, #bh-player:focus, #bh-enemy:focus{\r\n\t outline: 0;\r\n}\r\n#bh-start{\r\n\tposition: absolute;\r\n\tmargin-left: -30px;\r\n\ttop: 150px;\r\n\tbackground-color: #AFF;\r\n\tborder: 2px solid #000;\r\n\tborder-radius: 10px;\r\n\tfont-size: 25px;\r\n\r\n\tz-index: 1;\r\n}\r\n#bh-start:hover{\r\n\tborder-color: #666;\r\n}\r\n", ""]);
 
 // exports
 
@@ -843,6 +843,51 @@ exports.push([module.i, "/* rack */\r\n#c4-rack{\r\n  margin: 0 auto;\r\n  width
 
 /***/ }),
 /* 12 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(13);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./tetrisStyle.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./tetrisStyle.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "#tetris-screen{\r\n  position: relative;\r\n  width: 400px;\r\n  height: 402px;\r\n  border: 1px solid black;\r\n  margin: 0 auto;\r\n}\r\n#tetris-screen:focus{\r\n  outline: 0;\r\n}\r\n#tetris-blockField{\r\n  position:absolute;\r\n  height: 100%;\r\n  width: 202px;\r\n  background-color: black;\r\n\r\n  /* to fix inline-block space */\r\n  font-size: 0px;\r\n}\r\n#tetris-blockField > div > div{\r\n  display: inline-block;\r\n  border: 1px solid black;\r\n  width: 20px;\r\n  height: 20px;\r\n}\r\n\r\n.tetris-blk-1{\r\n  background-color: red;\r\n}\r\n.tetris-blk-2{\r\n  background-color: blue;\r\n}\r\n.tetris-blk-3{\r\n  background-color: violet;\r\n}\r\n.tetris-blk-4{\r\n  background-color: green;\r\n}\r\n.tetris-blk-5{\r\n  background-color: orange;\r\n}\r\n.tetris-blk-6{\r\n  background-color: cyan;\r\n}\r\n.tetris-blk-7{\r\n  background-color: yellow;\r\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 14 */
 /***/ (function(module, exports) {
 
 app.controller('homeCtrl', function($scope, $http){
@@ -851,7 +896,7 @@ app.controller('homeCtrl', function($scope, $http){
 })
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1358,7 +1403,7 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1538,7 +1583,180 @@ app.controller('connect4Ctrl', function($scope, $timeout){
 
 
 /***/ }),
-/* 15 */
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+app.controller("tetrisCtrl", function($scope){
+  let gameStart = false;
+
+  // block field is 20 rows, 10 cols
+  $scope.blockField = [];
+  let rowSize = 20;
+  let colSize = 10;
+
+  /* block starting coords
+  ID: shape/color
+  ===============
+  0: "EMPTY"/black;
+  1: Z/red;
+  2: S/blue;
+  3: T/purple;
+  4: L/green;
+  5: J/orange;
+  6: Line/light-blue;
+  7: Box/yellow;
+  ===============*/
+  const blk_structure = {
+    1: [[0,3],[0,4],[1,4],[1,5]],
+    2: [[0,4],[0,5],[1,3],[1,4]],
+    3: [[0,4],[1,3],[1,4],[1,5]],
+    4: [[1,4],[1,5],[1,6],[0,6]],
+    5: [[0,4],[0,5],[0,6],[1,6]],
+    6: [[0,3],[0,4],[0,5],[0,6]],
+    7: [[0,4],[0,5],[1,4],[1,5]]
+  }
+
+  let blk, blkColor;
+  let blockFallInterval, blockFallSpeed = 1000;
+
+  $scope.init = function(){
+    gameStart = true;
+    // create empty grid
+    for(let r=0; r<rowSize; r++){
+      $scope.blockField.push([]);
+      for(let c=0; c<colSize; c++){
+        $scope.blockField[r].push(0);
+      }
+    }
+
+    getNewBlock();
+    blockFallInterval = setInterval(blockFall, blockFallSpeed);
+  }
+
+  $scope.keyDown = function(e){
+    if(gameStart){
+      switch(e.key.toLowerCase()){
+        case 'a':
+          leftWallCollision();
+          break;
+        case 'd':
+          rightWallCollision();
+          break;
+        case 's':
+          if(!floorCollision()){
+            clearInterval(blockFallInterval);
+            blockFallInterval = setInterval(blockFall, blockFallSpeed);
+          };
+          break;
+      }
+    }
+
+  }
+
+  function leftWallCollision(){
+    if(blk[0][1] !== 0 && blk[1][1] !== 0 && blk[2][1] !== 0 && blk[3][1] !== 0){
+      console.log("wall not touched")
+      for(let i=0; i<blk.length; i++){
+        $scope.blockField[ blk[i][0] ][ blk[i][1] ] = 0;
+      }
+
+      for(let i=0; i<blk.length; i++){
+        blk[i][1]--;
+        $scope.blockField[ blk[i][0] ][ blk[i][1] ] = blkColor;
+      }
+    }
+  }
+  function rightWallCollision(){
+    if(blk[0][1] !== colSize-1 && blk[1][1] !== colSize-1 && blk[2][1] !== colSize-1 && blk[3][1] !== colSize-1){
+      console.log(blk[3][1])
+      for(let i=0; i<blk.length; i++){
+        $scope.blockField[ blk[i][0] ][ blk[i][1] ] = 0;
+      }
+
+      for(let i=0; i<blk.length; i++){
+        blk[i][1]++;
+        $scope.blockField[ blk[i][0] ][ blk[i][1] ] = blkColor;
+      }
+    }
+  }
+  function floorCollision(){
+    let bottomReached = false;
+
+    for(let i=0; i<blk.length; i++){
+      // check if the tile coords of the falling block reached the bottom
+      if(blk[i][0] + 1 === 20){
+        bottomReached = true;
+        break;
+      }
+      // check if the tile coords of the falling block reached other blocks
+      if($scope.blockField[ blk[i][0] + 1 ][ blk[i][1] ] !== 0){
+        if(!checkTileExists([blk[i][0] + 1, blk[i][1]])){
+          bottomReached = true;
+          break;
+        }
+      }
+    }
+
+    // move block if still falling, else grab new block
+    if(!bottomReached){
+      for(let i=0; i<blk.length; i++){
+        $scope.blockField[ blk[i][0] ][ blk[i][1] ] = 0;
+      }
+
+      for(let i=0; i<blk.length; i++){
+        blk[i][0]++;
+        $scope.blockField[ blk[i][0] ][ blk[i][1] ] = blkColor;
+      }
+    }
+
+    return bottomReached;
+  }
+
+  function blockFall(){
+    if(floorCollision()){
+      getNewBlock();
+    }
+
+    //redraw grid
+    $scope.$apply();
+  }
+
+  // check if a tile is part of falling block
+  function checkTileExists(tile){
+    for(let i=0; i<blk.length; i++){
+      if(blk[i][0] === tile[0] && blk[i][1] === tile[1])
+        return true;
+    }
+    return false;
+  }
+
+  // get a new block at random
+  function getNewBlock(){
+    blk = [];
+    blkColor = Math.ceil(Math.random()*7);
+
+    // get tile coordinates of new block, then draw on grid
+    for(let i=0; i<blk_structure[ blkColor ].length; i++){
+      blk.push(blk_structure[ blkColor ][i].slice(0));
+    }
+
+    for(let i=0; i<blk.length; i++){
+      if($scope.blockField[ blk[i][0] ][ blk[i][1] ] !== 0){
+        clearInterval(blockFallInterval);
+        gameStart = false;
+      }
+
+      $scope.blockField[ blk[i][0] ][ blk[i][1] ] = blkColor;
+    }
+  }
+})
+
+
+/***/ }),
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1693,163 +1911,6 @@ app.service("BH_points", function(){
 		spawnBullet: spawnBullet
 	};
 })
-
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-app.controller("tetrisCtrl", function($scope){
-  // block field is 20 rows, 10 cols
-  $scope.blockField = [];
-  let rowSize = 20;
-  let colSize = 10;
-
-  /* ID: shape/color
-  ===============
-  0: "EMPTY"/black;
-  1: Z/red;
-  2: S/blue;
-  3: T/purple;
-  4: L/green;
-  5: Reverse-L/orange;
-  6: Line/light-blue;
-  7: Box/yellow;
-  ===============*/
-  let blk_structure = {
-    1: [[0,3],[0,4],[1,4],[1,5]],
-    2: [[0,4],[0,5],[1,3],[1,4]],
-    3: [[0,4],[1,3],[1,4],[1,5]],
-    4: [[0,4],[1,4],[2,4],[2,5]],
-    5: [[0,4],[1,4],[2,4],[2,3]],
-    6: [[0,3],[0,4],[0,5],[0,6]],
-    7: [[0,4],[0,5],[1,4],[1,5]]
-  }
-
-  let blk, blkColor;
-
-  $scope.init = function(){
-    for(let r=0; r<rowSize; r++){
-      $scope.blockField.push([]);
-      for(let c=0; c<colSize; c++){
-        $scope.blockField[r].push(0);
-      }
-    }
-
-    getNewBlock();
-    gameStart();
-  }
-
-  function gameStart(){
-    let blkFall = setInterval(function(){
-      let bottomReached = false;
-
-      // check if the tiles of the block reached the bottom
-      for(let i=0; i<blk.length; i++){
-        if(blk[i][0] + 1 === 20){
-          bottomReached = true;
-          break;
-        }
-        if($scope.blockField[ blk[i][0] + 1 ][ blk[i][1] ] !== 0){
-          if(!checkTileExists([blk[i][0] + 1, blk[i][1]])){
-            bottomReached = true;
-            break;
-          }
-        }
-      }
-
-      if(!bottomReached){
-        for(let i=0; i<blk.length; i++){
-          $scope.blockField[ blk[i][0] ][ blk[i][1] ] = 0;
-        }
-
-        for(let i=0; i<blk.length; i++){
-          blk[i][0]++;
-          $scope.blockField[ blk[i][0] ][ blk[i][1] ] = blkColor;
-        }
-      }
-      else{
-        getNewBlock();
-      }
-      $scope.$apply();
-    }, 100);
-  }
-
-  function checkTileExists(tmp){
-    let tileExists = false;
-
-    for(let j=0; j<blk.length; j++){
-      if(blk[j][0] === tmp[0] && blk[j][1] === tmp[1]){
-        tileExists = true;
-        break;
-      }
-    }
-
-    return tileExists;
-  }
-
-  // get random block
-  function getNewBlock(){
-    blkColor = Math.ceil(Math.random()*7);
-    blk = [];
-
-    for(let i=0; i<blk_structure[ blkColor ].length; i++){
-      blk.push(blk_structure[ blkColor ][i].slice(0));
-    }
-
-    for(let i=0; i<blk.length; i++){
-      $scope.blockField[ blk[i][0] ][ blk[i][1] ] = blkColor;
-    }
-  }
-})
-
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(18);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {"hmr":true}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!./tetrisStyle.css", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!./tetrisStyle.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 18 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "#tetris-screen{\r\n\r\n\r\n  position: relative;\r\n  width: 400px;\r\n  height: 402px;\r\n  border: 1px solid black;\r\n  margin: 0 auto;\r\n}\r\n#tetris-blockField{\r\n\r\n\r\n  position:absolute;\r\n  height: 100%;\r\n  width: 202px;\r\n  background-color: black;\r\n\r\n  /* to fix inline-block space */\r\n  font-size: 0px;\r\n}\r\n#tetris-blockField > div > div{\r\n  display: inline-block;\r\n  border: 1px solid black;\r\n  width: 20px;\r\n  height: 20px;\r\n}\r\n\r\n.tetris-blk-1{\r\n  background-color: red;\r\n}\r\n.tetris-blk-2{\r\n  background-color: blue;\r\n}\r\n.tetris-blk-3{\r\n  background-color: violet;\r\n}\r\n.tetris-blk-4{\r\n  background-color: green;\r\n}\r\n.tetris-blk-5{\r\n  background-color: orange;\r\n}\r\n.tetris-blk-6{\r\n  background-color: cyan;\r\n}\r\n.tetris-blk-7{\r\n  background-color: yellow;\r\n}\r\n", ""]);
-
-// exports
 
 
 /***/ })
