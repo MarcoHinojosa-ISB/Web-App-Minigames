@@ -2,8 +2,8 @@
   <h1>Tetris</h1>
   <div id="tetris-screen" tabindex="1" ng-keypress="keyDown($event)">
     <div id="tetris-blockField" >
-      <div ng-repeat="blkRow in blockField track by $index">
-        <div ng-repeat="blk in blkRow track by $index" class="tetris-blk-{{blk}}"></div>
+      <div ng-repeat="blkRow in grid track by $index">
+        <div ng-repeat="blk in blkRow track by $index" class="tetris-blk tetris-blkColor-{{blk}}"></div>
       </div>
     </div>
   </div>

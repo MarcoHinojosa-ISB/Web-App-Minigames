@@ -17,31 +17,32 @@
   /* to fix inline-block space */
   font-size: 0px;
 }
-#tetris-blockField > div > div{
+.tetris-blk{
   display: inline-block;
   border: 1px solid black;
   width: 20px;
   height: 20px;
+  border-radius: 3px;
 }
 
-.tetris-blk-1{
+.tetris-blkColor-1{
   background-color: red;
 }
-.tetris-blk-2{
+.tetris-blkColor-2{
   background-color: blue;
 }
-.tetris-blk-3{
+.tetris-blkColor-3{
   background-color: violet;
 }
-.tetris-blk-4{
+.tetris-blkColor-4{
   background-color: green;
 }
-.tetris-blk-5{
+.tetris-blkColor-5{
   background-color: orange;
 }
-.tetris-blk-6{
+.tetris-blkColor-6{
   background-color: cyan;
 }
-.tetris-blk-7{
+.tetris-blkColor-7{
   background-color: yellow;
 }
