@@ -881,7 +881,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "#tetris-screen{\r\n  position: relative;\r\n  width: 400px;\r\n  height: 402px;\r\n  border: 1px solid black;\r\n  margin: 0 auto;\r\n}\r\n#tetris-screen:focus{\r\n  outline: 0;\r\n}\r\n#tetris-blockField{\r\n  position:absolute;\r\n  height: 100%;\r\n  width: 202px;\r\n  background-color: black;\r\n\r\n  /* to fix inline-block space */\r\n  font-size: 0px;\r\n}\r\n.tetris-blk{\r\n  display: inline-block;\r\n  border: 1px solid black;\r\n  width: 20px;\r\n  height: 20px;\r\n  border-radius: 3px;\r\n}\r\n\r\n.tetris-blkColor-1{\r\n  background-color: red;\r\n}\r\n.tetris-blkColor-2{\r\n  background-color: blue;\r\n}\r\n.tetris-blkColor-3{\r\n  background-color: violet;\r\n}\r\n.tetris-blkColor-4{\r\n  background-color: green;\r\n}\r\n.tetris-blkColor-5{\r\n  background-color: orange;\r\n}\r\n.tetris-blkColor-6{\r\n  background-color: cyan;\r\n}\r\n.tetris-blkColor-7{\r\n  background-color: yellow;\r\n}\r\n", ""]);
+exports.push([module.i, "#tetris-screen{\r\n  position: relative;\r\n  width: 400px;\r\n  height: 402px;\r\n  border: 1px solid black;\r\n  margin: 0 auto;\r\n}\r\n#tetris-screen:focus{\r\n  outline: 0;\r\n}\r\n\r\n#tetris-start, #tetris-gameover{\r\n  position: absolute;\r\n  top: 90px;\r\n  width: 202px;\r\n  margin: 0 auto;\r\n\r\n  z-index: 1;\r\n}\r\n#tetris-gameover{\r\n  color: white;\r\n  display: none;\r\n}\r\n#tetris-start button, #tetris-gameover button{\r\n  background-color: #ccccee;\r\n  color: black;\r\n  border: 3px solid #7777bb;\r\n  padding: 7px;\r\n  transition: 0.1s;\r\n}\r\n#tetris-start button:hover, #tetris-gameover button:hover{\r\n  padding: 8px;\r\n}\r\n\r\n#tetris-grid{\r\n  position: absolute;\r\n  width: 202px;\r\n  background-color: #222222;\r\n\r\n  /* to fix inline-block space */\r\n  font-size: 0px;\r\n}\r\n#tetris-next-grid{\r\n  width: 70%;\r\n  margin: 0 auto;\r\n  border: 3px solid #888888;\r\n  background-color: #222222;\r\n  border-radius: 5px;\r\n}\r\n#tetris-next-grid > div{\r\n  width: 82px;\r\n  height: 82px;\r\n  margin: 0 auto;\r\n  border-radius: 5px;\r\n\r\n  /* to fix inline-block space */\r\n  font-size: 0px;\r\n}\r\n#tetris-status{\r\n  position: absolute;\r\n  width: 196px;\r\n  height: 100%;\r\n  background-color: #555555;\r\n  left: 202px;\r\n}\r\n#tetris-status > h4{\r\n  color: white;\r\n}\r\n#points, #lines-cleared{\r\n  position: relative;\r\n  width: 80%;\r\n  margin: 0 auto;\r\n  border: 3px solid #888888;\r\n  background-color: #cccccc;\r\n}\r\n\r\n.tetris-blk{\r\n  display: inline-block;\r\n  border: 1px solid #222222;\r\n  width: 20px;\r\n  height: 20px;\r\n  border-radius: 3px;\r\n}\r\n\r\n.tetris-blkColor-1{\r\n  background-color: red;\r\n}\r\n.tetris-blkColor-2{\r\n  background-color: blue;\r\n}\r\n.tetris-blkColor-3{\r\n  background-color: violet;\r\n}\r\n.tetris-blkColor-4{\r\n  background-color: green;\r\n}\r\n.tetris-blkColor-5{\r\n  background-color: orange;\r\n}\r\n.tetris-blkColor-6{\r\n  background-color: cyan;\r\n}\r\n.tetris-blkColor-7{\r\n  background-color: yellow;\r\n}\r\n", ""]);
 
 // exports
 
@@ -1591,9 +1591,10 @@ app.controller('connect4Ctrl', function($scope, $timeout){
 
 app.controller("tetrisCtrl", function($scope){
   let gameStart = false;
+  $scope.points = 0;
+  $scope.linesCleared = 0;
 
-  // block field is 20 rows, 10 cols
-  $scope.grid = [];
+  $scope.grid = []; $scope.nextGrid = [];
   const rowSize = 20;
   const colSize = 10;
 
@@ -1606,8 +1607,8 @@ app.controller("tetrisCtrl", function($scope){
   3: T/purple;
   4: L/green;
   5: J/orange;
-  6: Line/light-blue;
-  7: Box/yellow;
+  6: I/light-blue;
+  7: O/yellow;
   ===============*/
   const blk_structure = {
     1: [[0,3],[0,4],[1,4],[1,5]],
@@ -1615,25 +1616,67 @@ app.controller("tetrisCtrl", function($scope){
     3: [[0,4],[1,4],[1,3],[1,5]],
     4: [[1,3],[1,4],[1,5],[0,5]],
     5: [[1,3],[1,4],[1,5],[0,3]],
-    6: [[1,3],[1,4],[1,5],[1,6]],
+    6: [[0,3],[0,4],[0,5],[0,6]],
     7: [[0,4],[0,5],[1,4],[1,5]]
+  }
+  const next_blk_structure = {
+    1: [[1,1],[1,2],[2,2],[2,3]],
+    2: [[1,2],[1,1],[2,0],[2,1]],
+    3: [[1,1],[2,1],[2,0],[2,2]],
+    4: [[2,0],[2,1],[2,2],[1,2]],
+    5: [[1,1],[2,1],[2,2],[2,3]],
+    6: [[1,0],[1,1],[1,2],[1,3]],
+    7: [[1,1],[1,2],[2,1],[2,2]]
   }
 
   let blk, blkColor;
+  let nextBlk, nextBlkColor;
   let blockFallInterval, blockFallSpeed = 500;
 
   $scope.init = function(){
-    gameStart = true;
     // create empty grid
     for(let r=0; r<rowSize; r++){
       $scope.grid.push([]);
+      if(r<4){
+        $scope.nextGrid.push([]);
+      }
       for(let c=0; c<colSize; c++){
         $scope.grid[r].push(0);
+        if(r<4 && c<4){
+          $scope.nextGrid[r].push(0);
+        }
+      }
+    }
+  }
+
+  $scope.startGame = function(){
+    $("#tetris-screen").focus();
+
+    // hide start button
+    $("#tetris-start").css("display", "none");
+
+    // start game variables
+    gameStart = true;
+    $scope.points = 0;
+    $scope.linesCleared = 0;
+
+    // begin dropping blocks
+    nextBlkColor = Math.ceil(Math.random()*7);
+    getNewBlock();
+    blockFallInterval = setInterval(blockFall, blockFallSpeed);
+  }
+
+  $scope.resetGame = function(){
+    $("#tetris-grid").css("opacity","1");
+    $("#tetris-gameover").css("display", "none");
+
+    for(let r=0; r<rowSize; r++){
+      for(let c=0; c<colSize; c++){
+        $scope.grid[r][c] = 0;
       }
     }
 
-    getNewBlock();
-    blockFallInterval = setInterval(blockFall, blockFallSpeed);
+    $scope.startGame();
   }
 
   function blockFall(){
@@ -1642,29 +1685,30 @@ app.controller("tetrisCtrl", function($scope){
       checkLineClear();
       getNewBlock();
     }
-
-    //redraw grid
     $scope.$apply();
   }
 
   function checkLineClear(){
     let miss;
 
-    for(let i=0; i<$scope.grid.length; i++){
+    for(let r=0; r<rowSize; r++){
       miss = false;
 
-      for(let j=0; j<$scope.grid[i].length; j++){
-        if($scope.grid[i][j] === 0){
+      for(let c=0; c<colSize; c++){
+        if($scope.grid[r][c] === 0){
           miss = true;
           break;
         }
       }
       if(!miss){
-        $scope.grid.splice(i,1);
+        $scope.grid.splice(r,1);
         $scope.grid.unshift([]);
+
         for(let c=0; c<colSize; c++){
           $scope.grid[0].push(0);
         }
+        $scope.points += 40;
+        $scope.linesCleared++;
       }
     }
   }
@@ -1672,26 +1716,39 @@ app.controller("tetrisCtrl", function($scope){
   // get a new block at random
   function getNewBlock(){
     blk = [];
-    blkColor = Math.ceil(Math.random()*7);
+    nextBlk = [];
 
-    // get tile coordinates of new block
-    for(let i=0; i<blk_structure[ blkColor ].length; i++){
+    blkColor = nextBlkColor;
+    nextBlkColor = Math.ceil(Math.random()*7);
+
+    // get tile coordinates of next blocks
+    for(let i=0; i<4; i++){
       blk.push(blk_structure[ blkColor ][i].slice(0));
+      nextBlk.push(next_blk_structure[ nextBlkColor ][i].slice(0));
     }
 
-    // draw block on grid
-    for(let i=0; i<blk.length; i++){
-      // end game if no open space for new block
+    // clear grid on status area
+    for(let r=0; r<4; r++){
+      for(let c=0; c<4; c++){
+        $scope.nextGrid[r][c] = 0;
+      }
+    }
+
+    // draw blocks on grids
+    for(let i=0; i<4; i++){
+      // end game if no open space for current block
       if($scope.grid[ blk[i][0] ][ blk[i][1] ] !== 0){
         clearInterval(blockFallInterval);
         gameStart = false;
+        $("#tetris-grid").css("opacity","0.7");
+        $("#tetris-gameover").css("display", "block");
       }
 
       $scope.grid[ blk[i][0] ][ blk[i][1] ] = blkColor;
+      $scope.nextGrid[ nextBlk[i][0] ][ nextBlk[i][1] ] = nextBlkColor;
     }
   }
 
-  // block rotation
   function blockRotation(){
     let pivot = blk[1];
     let rotateMatrix = [[0,1],[-1,0]];
@@ -1733,21 +1790,32 @@ app.controller("tetrisCtrl", function($scope){
     }
   }
 
-  $scope.keyDown = function(e){
+  // controls
+  // ========
+  // W/Up: rotate
+  // A/left: move left
+  // S/Down: move down
+  // D/Right: move right
+  $scope.controls = function(e){
     if(gameStart){
-      switch(e.key.toLowerCase()){
-        case 'w':
+      switch(e.keyCode){
+        case 87:
+        case 38:
           blockRotation();
           break;
-        case 'a':
+        case 37:
+        case 65:
           leftWallCollision();
           break;
-        case 'd':
+        case 39:
+        case 68:
           rightWallCollision();
           break;
-        case 's':
+        case 40:
+        case 83:
           // if no floor collision, reset block fall timer
           if(!floorCollision()){
+            $scope.points++;
             clearInterval(blockFallInterval);
             blockFallInterval = setInterval(blockFall, blockFallSpeed);
           };

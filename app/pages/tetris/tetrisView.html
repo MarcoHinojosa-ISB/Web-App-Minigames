@@ -1,9 +1,32 @@
 <div ng-init="init()" class="text-center" >
   <h1>Tetris</h1>
-  <div id="tetris-screen" tabindex="1" ng-keypress="keyDown($event)">
-    <div id="tetris-blockField" >
+  <div id="tetris-screen" tabindex="1" ng-keydown="controls($event)">
+    <div id="tetris-grid">
       <div ng-repeat="blkRow in grid track by $index">
         <div ng-repeat="blk in blkRow track by $index" class="tetris-blk tetris-blkColor-{{blk}}"></div>
+      </div>
+    </div>
+    <div id="tetris-start">
+      <button ng-click="startGame()">Start Game</button>
+    </div>
+    <div id="tetris-gameover">
+      <h2>GAME OVER</h2>
+      <button ng-click="resetGame()">Restart Game</button>
+    </div>
+
+    <div id="tetris-status">
+      <h4>Points</h4>
+      <div id="points"><b>{{points}}</b></div>
+      <h4>Lines Cleared</h4>
+      <div id="lines-cleared"><b>{{linesCleared}}</b></div>
+      <br/>
+      <h4>Next Block</h4>
+      <div id="tetris-next-grid">
+        <div>
+          <div ng-repeat="blkRow in nextGrid track by $index">
+            <div ng-repeat="blk in blkRow track by $index" class="tetris-blk tetris-blkColor-{{blk}}"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

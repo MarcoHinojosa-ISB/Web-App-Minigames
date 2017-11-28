@@ -8,18 +8,75 @@
 #tetris-screen:focus{
   outline: 0;
 }
-#tetris-blockField{
-  position:absolute;
-  height: 100%;
+
+#tetris-start, #tetris-gameover{
+  position: absolute;
+  top: 90px;
   width: 202px;
-  background-color: black;
+  margin: 0 auto;
+
+  z-index: 1;
+}
+#tetris-gameover{
+  color: white;
+  display: none;
+}
+#tetris-start button, #tetris-gameover button{
+  background-color: #ccccee;
+  color: black;
+  border: 3px solid #7777bb;
+  padding: 7px;
+  transition: 0.1s;
+}
+#tetris-start button:hover, #tetris-gameover button:hover{
+  padding: 8px;
+}
+
+#tetris-grid{
+  position: absolute;
+  width: 202px;
+  background-color: #222222;
 
   /* to fix inline-block space */
   font-size: 0px;
 }
+#tetris-next-grid{
+  width: 70%;
+  margin: 0 auto;
+  border: 3px solid #888888;
+  background-color: #222222;
+  border-radius: 5px;
+}
+#tetris-next-grid > div{
+  width: 82px;
+  height: 82px;
+  margin: 0 auto;
+  border-radius: 5px;
+
+  /* to fix inline-block space */
+  font-size: 0px;
+}
+#tetris-status{
+  position: absolute;
+  width: 196px;
+  height: 100%;
+  background-color: #555555;
+  left: 202px;
+}
+#tetris-status > h4{
+  color: white;
+}
+#points, #lines-cleared{
+  position: relative;
+  width: 80%;
+  margin: 0 auto;
+  border: 3px solid #888888;
+  background-color: #cccccc;
+}
+
 .tetris-blk{
   display: inline-block;
-  border: 1px solid black;
+  border: 1px solid #222222;
   width: 20px;
   height: 20px;
   border-radius: 3px;
