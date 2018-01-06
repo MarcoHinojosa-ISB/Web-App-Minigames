@@ -12,15 +12,17 @@
 	max-width: 800px;
 }
 #bh-screen, #bh-player, #bh-enemy{
+	outline: 0;
 	position: absolute;
+	left: 0;
 }
 #bh-screen:focus, #bh-player:focus, #bh-enemy:focus{
-	 outline: 0;
+
 }
 #bh-start{
 	position: absolute;
-	margin-left: -30px;
 	top: 150px;
+	margin-left: -40px;
 	background-color: #AFF;
 	border: 2px solid #000;
 	border-radius: 10px;

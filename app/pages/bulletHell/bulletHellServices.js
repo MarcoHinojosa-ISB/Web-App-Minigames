@@ -36,13 +36,35 @@ app.service("BH_points", function(){
 		this.shotDelay = data.shotDelay,
 		this.radius = data.radius,
 
-		// Get max health
 		this.getMaxHealth = function(){
 			return maxHealth;
 		}
-		// take damage
 		this.takeDmg = function(dmg){
 			this.health - dmg >= 0 ? this.health -= dmg : this.health = 0;
+		}
+		this.moveUp = function(){
+			if(this.yPos - this.radius - this.ySpd < 0)
+				this.yPos = this.radius;
+			else
+				this.yPos -= this.ySpd;
+		}
+		this.moveRight = function(gameWidth){
+			if(this.xPos + this.radius + this.xSpd > gameWidth - 300)
+					this.xPos = gameWidth - 300 - this.radius;
+			else
+				this.xPos += this.xSpd;
+		}
+		this.moveDown = function(gameHeight){
+			if(this.yPos + this.radius + this.ySpd > gameHeight)
+				this.yPos = gameHeight - this.radius;
+			else
+				this.yPos += this.ySpd;
+		}
+		this.moveLeft = function(){
+			if(this.xPos - this.radius - this.xSpd < 0)
+				this.xPos = this.radius;
+			else
+				this.xPos -= this.xSpd;
 		}
 	};
 

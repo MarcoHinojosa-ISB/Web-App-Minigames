@@ -1,6 +1,6 @@
 "use strict"
 
-app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBullet, BH_enemy, BH_enemyBullet, BH_points){
+app.controller('bulletHellCtrl', function($scope, BH_player, BH_playerBullet, BH_enemy, BH_enemyBullet, BH_points){
 		let c_BG = $("#bh-screen")[0];
 		let c_PL = $("#bh-player")[0];
 		let c_EN = $("#bh-enemy")[0];
@@ -96,31 +96,19 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 		function keyChecker(){
 			// Up
 			if(keyState[87]){
-      	if(pl.yPos - pl.radius - pl.ySpd < 0)
-      		pl.yPos = pl.radius;
-      	else
-      		pl.yPos -= pl.ySpd;
+				pl.moveUp();
       }
 			// Right
 	    if(keyState[68]){
-	    	if(pl.xPos + pl.radius + pl.xSpd > gameWidth - 300)
-        		pl.xPos = gameWidth - 300 - pl.radius;
-      	else
-      		pl.xPos += pl.xSpd;
+				pl.moveRight(gameWidth);
 	    }
 			// Down
       if(keyState[83]){
-      	if(pl.yPos + pl.radius + pl.ySpd > gameHeight)
-      		pl.yPos = gameHeight - pl.radius;
-      	else
-      		pl.yPos += pl.ySpd;
+				pl.moveDown(gameHeight);
       }
 			// Left
       if(keyState[65]){
-      	if(pl.xPos - pl.radius - pl.xSpd < 0)
-      		pl.xPos = pl.radius;
-      	else
-      		pl.xPos -= pl.xSpd;
+				pl.moveLeft();
       }
 			// shoot bullets every 8 milliseconds
 	    if(keyState[75]){

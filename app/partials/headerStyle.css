@@ -21,13 +21,17 @@ body{
 }
 #header-menu a{
 	color: #000000;
+	text-decoration: none;
+	display: block;
+	line-height: 50px;
 }
-#header-menu a li{
-	float: left;
+#header-menu li{
 	list-style-type: none;
-	padding: 11px;
+	float: left;
+	padding-left: 10px;
+	padding-right: 10px;
 	transition: 0.3s;
 }
-#header-menu a:hover li{
+#header-menu li:hover{
 	background-color: #eeeeee;
 }

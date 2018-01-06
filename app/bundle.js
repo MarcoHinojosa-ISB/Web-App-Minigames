@@ -532,13 +532,16 @@ __webpack_require__(6);
 __webpack_require__(8);
 __webpack_require__(10);
 __webpack_require__(12);
+__webpack_require__(19);
 
 //call angularjs controllers, services
 __webpack_require__(14);
 __webpack_require__(15);
 __webpack_require__(16);
 __webpack_require__(17);
+__webpack_require__(21);
 __webpack_require__(18);
+__webpack_require__(22);
 
 app.config(function($locationProvider, $routeProvider){
   $routeProvider
@@ -557,6 +560,10 @@ app.config(function($locationProvider, $routeProvider){
     .when('/tetris', {
       templateUrl: 'app/pages/tetris/tetrisView.html',
       controller: 'tetrisCtrl'
+    })
+    .when('/breakout', {
+      templateUrl: 'app/pages/breakout/breakoutView.html',
+      controller: 'breakoutCtrl'
     })
     .otherwise({
       redirectTo: '/'
@@ -606,7 +613,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "body{\r\n\tbackground-color: #D3DBB2;\r\n}\r\n\r\n/* header */\r\n#header-title{\r\n\tfont-family: \"Arial Black\", Gadget, sans-serif;\r\n\tfont-size: 40px;\r\n\ttext-align: center;\r\n}\r\n\r\n/* menubar */\r\n#header-menu{\r\n\tbackground-color: #ffffff;\r\n\tfont-family: Verdana, Geneva, sans-serif;\r\n\tfont-size: 20px;\r\n\tborder-radius: 10px;\r\n\tpadding-left: 5px;\r\n\theight: 50px;\r\n\tmargin-bottom: 10px;\r\n}\r\n#header-menu a{\r\n\tcolor: #000000;\r\n}\r\n#header-menu a li{\r\n\tfloat: left;\r\n\tlist-style-type: none;\r\n\tpadding: 11px;\r\n\ttransition: 0.3s;\r\n}\r\n#header-menu a:hover li{\r\n\tbackground-color: #eeeeee;\r\n}\r\n", ""]);
+exports.push([module.i, "body{\r\n\tbackground-color: #D3DBB2;\r\n}\r\n\r\n/* header */\r\n#header-title{\r\n\tfont-family: \"Arial Black\", Gadget, sans-serif;\r\n\tfont-size: 40px;\r\n\ttext-align: center;\r\n}\r\n\r\n/* menubar */\r\n#header-menu{\r\n\tbackground-color: #ffffff;\r\n\tfont-family: Verdana, Geneva, sans-serif;\r\n\tfont-size: 20px;\r\n\tborder-radius: 10px;\r\n\tpadding-left: 5px;\r\n\theight: 50px;\r\n\tmargin-bottom: 10px;\r\n}\r\n#header-menu a{\r\n\tcolor: #000000;\r\n\ttext-decoration: none;\r\n\tdisplay: block;\r\n\tline-height: 50px;\r\n}\r\n#header-menu li{\r\n\tlist-style-type: none;\r\n\tfloat: left;\r\n\tpadding-left: 10px;\r\n\tpadding-right: 10px;\r\n\ttransition: 0.3s;\r\n}\r\n#header-menu li:hover{\r\n\tbackground-color: #eeeeee;\r\n}\r\n", ""]);
 
 // exports
 
@@ -791,7 +798,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "#bh-screen{\r\n\tbackground-color: #CCC;\r\n\tborder: 1px solid black;\r\n}\r\n\r\n#bh-canvas-container{\r\n\tposition: relative;\r\n\tleft: 0;\r\n\tright: 0;\r\n\tmargin-left: auto;\r\n \tmargin-right: auto;\r\n\tmax-width: 800px;\r\n}\r\n#bh-screen, #bh-player, #bh-enemy{\r\n\tposition: absolute;\r\n}\r\n#bh-screen:focus, #bh-player:focus, #bh-enemy:focus{\r\n\t outline: 0;\r\n}\r\n#bh-start{\r\n\tposition: absolute;\r\n\tmargin-left: -30px;\r\n\ttop: 150px;\r\n\tbackground-color: #AFF;\r\n\tborder: 2px solid #000;\r\n\tborder-radius: 10px;\r\n\tfont-size: 25px;\r\n\r\n\tz-index: 1;\r\n}\r\n#bh-start:hover{\r\n\tborder-color: #666;\r\n}\r\n", ""]);
+exports.push([module.i, "#bh-screen{\r\n\tbackground-color: #CCC;\r\n\tborder: 1px solid black;\r\n}\r\n\r\n#bh-canvas-container{\r\n\tposition: relative;\r\n\tleft: 0;\r\n\tright: 0;\r\n\tmargin-left: auto;\r\n \tmargin-right: auto;\r\n\tmax-width: 800px;\r\n}\r\n#bh-screen, #bh-player, #bh-enemy{\r\n\toutline: 0;\r\n\tposition: absolute;\r\n\tleft: 0;\r\n}\r\n#bh-screen:focus, #bh-player:focus, #bh-enemy:focus{\r\n\r\n}\r\n#bh-start{\r\n\tposition: absolute;\r\n\ttop: 150px;\r\n\tmargin-left: -40px;\r\n\tbackground-color: #AFF;\r\n\tborder: 2px solid #000;\r\n\tborder-radius: 10px;\r\n\tfont-size: 25px;\r\n\r\n\tz-index: 1;\r\n}\r\n#bh-start:hover{\r\n\tborder-color: #666;\r\n}\r\n", ""]);
 
 // exports
 
@@ -902,7 +909,7 @@ app.controller('homeCtrl', function($scope, $http){
 "use strict";
 
 
-app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBullet, BH_enemy, BH_enemyBullet, BH_points){
+app.controller('bulletHellCtrl', function($scope, BH_player, BH_playerBullet, BH_enemy, BH_enemyBullet, BH_points){
 		let c_BG = $("#bh-screen")[0];
 		let c_PL = $("#bh-player")[0];
 		let c_EN = $("#bh-enemy")[0];
@@ -998,31 +1005,19 @@ app.controller('bulletHellCtrl', function($scope, $http, BH_player, BH_playerBul
 		function keyChecker(){
 			// Up
 			if(keyState[87]){
-      	if(pl.yPos - pl.radius - pl.ySpd < 0)
-      		pl.yPos = pl.radius;
-      	else
-      		pl.yPos -= pl.ySpd;
+				pl.moveUp();
       }
 			// Right
 	    if(keyState[68]){
-	    	if(pl.xPos + pl.radius + pl.xSpd > gameWidth - 300)
-        		pl.xPos = gameWidth - 300 - pl.radius;
-      	else
-      		pl.xPos += pl.xSpd;
+				pl.moveRight(gameWidth);
 	    }
 			// Down
       if(keyState[83]){
-      	if(pl.yPos + pl.radius + pl.ySpd > gameHeight)
-      		pl.yPos = gameHeight - pl.radius;
-      	else
-      		pl.yPos += pl.ySpd;
+				pl.moveDown(gameHeight);
       }
 			// Left
       if(keyState[65]){
-      	if(pl.xPos - pl.radius - pl.xSpd < 0)
-      		pl.xPos = pl.radius;
-      	else
-      		pl.xPos -= pl.xSpd;
+				pl.moveLeft();
       }
 			// shoot bullets every 8 milliseconds
 	    if(keyState[75]){
@@ -1966,13 +1961,35 @@ app.service("BH_points", function(){
 		this.shotDelay = data.shotDelay,
 		this.radius = data.radius,
 
-		// Get max health
 		this.getMaxHealth = function(){
 			return maxHealth;
 		}
-		// take damage
 		this.takeDmg = function(dmg){
 			this.health - dmg >= 0 ? this.health -= dmg : this.health = 0;
+		}
+		this.moveUp = function(){
+			if(this.yPos - this.radius - this.ySpd < 0)
+				this.yPos = this.radius;
+			else
+				this.yPos -= this.ySpd;
+		}
+		this.moveRight = function(gameWidth){
+			if(this.xPos + this.radius + this.xSpd > gameWidth - 300)
+					this.xPos = gameWidth - 300 - this.radius;
+			else
+				this.xPos += this.xSpd;
+		}
+		this.moveDown = function(gameHeight){
+			if(this.yPos + this.radius + this.ySpd > gameHeight)
+				this.yPos = gameHeight - this.radius;
+			else
+				this.yPos += this.ySpd;
+		}
+		this.moveLeft = function(){
+			if(this.xPos - this.radius - this.xSpd < 0)
+				this.xPos = this.radius;
+			else
+				this.xPos -= this.xSpd;
 		}
 	};
 
@@ -2079,6 +2096,217 @@ app.service("BH_points", function(){
 		spawnBullet: spawnBullet
 	};
 })
+
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(20);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./breakoutStyle.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./breakoutStyle.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, "#bo-screen{\r\n  background-color: #CCC;\r\n  border: 1px solid black;\r\n}\r\n\r\n#bo-canvas-container{\r\n  position: relative;\r\n  left: 0;\r\n\tright: 0;\r\n\tmargin-left: auto;\r\n \tmargin-right: auto;\r\n  max-width: 800px;\r\n}\r\n#bo-screen, #bo-player{\r\n  outline: 0;\r\n  position: absolute;\r\n  left: 0;\r\n}\r\n#bo-start{\r\n  position: absolute;\r\n  top: 150px;\r\n\tmargin-left: -40px;\r\n  background-color: #eeeeee;\r\n  border: 2px solid #444444;\r\n  border-radius: 10px;\r\n  font-size: 25px;\r\n\r\n  z-index: 1;\r\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+app.controller("breakoutCtrl", function($scope, BO_paddle){
+  let c_BG = $("#bo-screen")[0];
+  let c_PL = $("#bo-player")[0];
+  let ctx_BG = c_BG.getContext("2d");
+  let ctx_PL = c_PL.getContext("2d");
+
+  const gameWidth = c_BG.getAttribute("width");
+  const gameHeight = c_BG.getAttribute("height");
+
+  let paddle;
+  let updater;
+  let timer = 10;
+
+  // Init
+  $scope.init = function(){
+    drawTitleScreen();
+  }
+
+  $scope.startGame = function(){
+    $("#bo-start").hide();
+
+    paddle = new BO_paddle.paddle({
+      position: 40,
+      speed: 5,
+      gameWidth: gameWidth,
+      gameHeight: gameHeight
+    });
+
+    updater = setInterval(updateGame, timer)
+  }
+
+  // Keys/Controls
+  let keyState = {};
+  $scope.keyDown = function(e){
+    keyState[e.keyCode || e.which] = true;
+  }
+  $scope.keyUp = function(e){
+    keyState[e.keyCode || e.which] = false;
+  }
+  function keyChecker(){
+    // Right
+    if(keyState[68]){
+      paddle.move(68);
+    }
+    // Left
+    if(keyState[65]){
+      paddle.move(65);
+    }
+  }
+
+  function drawTitleScreen(){
+    ctx_BG.clearRect(0, 0, gameWidth, gameHeight);
+
+    //Title
+    ctx_BG.beginPath();
+    ctx_BG.font = "40px Comic Sans MS";
+    ctx_BG.fillText("Break Out", 300, 100);
+    ctx_BG.closePath();
+  }
+
+  function updateGame(){
+    ctx_BG.clearRect(0,0,gameWidth,gameHeight);
+    ctx_PL.clearRect(0,0,gameWidth,gameHeight);
+
+    keyChecker();
+    drawPaddle();
+  }
+
+  function drawPaddle(){
+    ctx_PL.beginPath();
+    ctx_PL.fillStyle = "white";
+    ctx_PL.strokeStyle = "black";
+    ctx_PL.rect(paddle.getXPos(), paddle.getYPos(), paddle.getWidth(), paddle.getHeight());
+    ctx_PL.fill();
+    ctx_PL.stroke();
+    ctx_PL.closePath();
+  }
+})
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+app.service("BO_bricks", function(){
+  function brick(data){
+    const width = 60;
+    const height = 20;
+    let hp = data.hp;
+    let color = data.color;
+
+    this.getWidth = function(){
+      return width;
+    }
+    this.getHeight = function(){
+      return height;
+    }
+    this.damaged = function(){
+      hp -= 1;
+    }
+  }
+  return {
+    brick: brick
+  };
+})
+.service("BO_paddle", function(){
+  function paddle(data){
+    let xPos = data.position;
+    let yPos = data.gameHeight - 60;
+    let spd = data.speed;
+    let width = 100;
+    const height = 20;
+    const leftScreenBorder = 0;
+    const rightScreenBorder = data.gameWidth;
+
+    this.getWidth = function(){
+      return width;
+    }
+    this.getHeight = function(){
+      return height;
+    }
+    this.getXPos = function(){
+      return xPos;
+    }
+    this.getYPos = function(){
+      return yPos;
+    }
+
+    this.move = function(keyCode){
+      switch(keyCode){
+        // Right=68, Left=65
+        case 68:
+          xPos += spd;
+          if(xPos + width > rightScreenBorder)
+            xPos = rightScreenBorder - width;
+          break;
+        case 65:
+          xPos -= spd;
+          if(xPos < leftScreenBorder)
+            xPos = leftScreenBorder + 1;
+          break;
+      }
+    }
+  }
+
+  return {
+    paddle: paddle
+  };
+})/*
+.service("BO_ball", function(){
+  return {
+
+  }
+})*/
 
 
 /***/ })

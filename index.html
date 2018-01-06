@@ -1,33 +1,33 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <base href="/index.html">
-	<!-- client-side components -->
-	<script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
+  <head>
+    <base href="/index.html">
+
+  	<!-- bootstrap framework -->
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+
+  	<!-- meta tag for screen size -->
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+
+  <body ng-app="inventory" class="container">
+    <div class="row">
+    	<div class="col-md-12">
+  	     <div ng-include="'app/partials/headerView.html'"></div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <div ng-view></div>
+      </div>
+    </div>
+  </body>
+
+  <!-- scripts -->
+  <script type="text/javascript" src="/bower_components/jquery/dist/jquery.min.js"></script>
   <script type="text/javascript" src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
-	<script type="text/javascript" src="/bower_components/angular-route/angular-route.min.js"></script>
-  <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
-
-	<!-- meta tag for screen size -->
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-
-<body ng-app="inventory" class="container">
-  <div class="row">
-  	<div class="col-md-12">
-	     <div ng-include="'app/partials/headerView.html'"></div>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-12">
-      <div ng-view></div>
-    </div>
-  </div>
-</body>
-
-<!-- scripts -->
-<script type="text/javascript" src="/app/bundle.js"></script>
-
+  <script type="text/javascript" src="/bower_components/angular/angular.min.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-route/angular-route.min.js"></script>
+  <script type="text/javascript" src="/app/bundle.js"></script>
 </html>
