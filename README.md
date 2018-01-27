@@ -3,7 +3,7 @@
 Runs on Node.js
 
 To get started:
--run 'npm install'
--run 'bower install'
--run 'npm start' to start server
--on seperate window, run 'webpack' to update changes
+1. run 'npm install'
+2. run 'bower install'
+3. run 'npm start' to start server
+4. on seperate window, run 'webpack' to update changes
