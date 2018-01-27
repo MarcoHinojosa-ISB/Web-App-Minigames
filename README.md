@@ -3,7 +3,8 @@
 Runs on Node.js
 
 To get started:
-1. run 'npm install'
-2. run 'bower install'
-3. run 'npm start' to start server
-4. on seperate window, run 'webpack' to update changes
+1. Clone the repo in the project directory on the command line.
+1. Run 'npm install'.
+2. Run 'bower install'.
+3. Run 'npm start' to start server.
+4. On a seperate command line window, run 'webpack' to update changes in real time during development.
