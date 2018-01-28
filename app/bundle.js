@@ -215,7 +215,7 @@ module.exports = function(list, options) {
 
 	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
 	// tags it will allow on a page
-	if (!options.singleton) options.singleton = isOldIE();
+	if (!options.singleton && typeof options.singleton !== "boolean") options.singleton = isOldIE();
 
 	// By default, add <style> tags to the <head> element
 	if (!options.insertInto) options.insertInto = "head";
@@ -532,15 +532,15 @@ __webpack_require__(6);
 __webpack_require__(8);
 __webpack_require__(10);
 __webpack_require__(12);
-__webpack_require__(19);
+__webpack_require__(14);
 
 //call angularjs controllers, services
-__webpack_require__(14);
-__webpack_require__(15);
 __webpack_require__(16);
 __webpack_require__(17);
-__webpack_require__(21);
 __webpack_require__(18);
+__webpack_require__(19);
+__webpack_require__(20);
+__webpack_require__(21);
 __webpack_require__(22);
 
 app.config(function($locationProvider, $routeProvider){
@@ -608,12 +608,12 @@ if(false) {
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(undefined);
+exports = module.exports = __webpack_require__(0)(false);
 // imports
 
 
 // module
-exports.push([module.i, "body{\r\n\tbackground-color: #D3DBB2;\r\n}\r\n\r\n/* header */\r\n#header-title{\r\n\tfont-family: \"Arial Black\", Gadget, sans-serif;\r\n\tfont-size: 40px;\r\n\ttext-align: center;\r\n}\r\n\r\n/* menubar */\r\n#header-menu{\r\n\tbackground-color: #ffffff;\r\n\tfont-family: Verdana, Geneva, sans-serif;\r\n\tfont-size: 20px;\r\n\tborder-radius: 10px;\r\n\tpadding-left: 5px;\r\n\theight: 50px;\r\n\tmargin-bottom: 10px;\r\n}\r\n#header-menu a{\r\n\tcolor: #000000;\r\n\ttext-decoration: none;\r\n\tdisplay: block;\r\n\tline-height: 50px;\r\n}\r\n#header-menu li{\r\n\tlist-style-type: none;\r\n\tfloat: left;\r\n\tpadding-left: 10px;\r\n\tpadding-right: 10px;\r\n\ttransition: 0.3s;\r\n}\r\n#header-menu li:hover{\r\n\tbackground-color: #eeeeee;\r\n}\r\n", ""]);
+exports.push([module.i, "/* header */\r\n#header-title{\r\n\tfont-family: \"Arial Black\", Gadget, sans-serif;\r\n\tfont-size: 40px;\r\n\ttext-align: center;\r\n}\r\n\r\n/* menubar */\r\n#header-menu{\r\n\tbackground-color: #ffffff;\r\n\tfont-family: Verdana, Geneva, sans-serif;\r\n\tfont-size: 20px;\r\n\tborder-radius: 10px;\r\n\tpadding-left: 5px;\r\n\theight: 50px;\r\n\tmargin-bottom: 10px;\r\n}\r\n#header-menu a{\r\n\tcolor: #000000;\r\n\ttext-decoration: none;\r\n\tdisplay: block;\r\n\tline-height: 50px;\r\n}\r\n#header-menu li{\r\n\tlist-style-type: none;\r\n\tfloat: left;\r\n\tpadding-left: 10px;\r\n\tpadding-right: 10px;\r\n\ttransition: 0.3s;\r\n}\r\n#header-menu li:hover{\r\n\tbackground-color: #eeeeee;\r\n}\r\n", ""]);
 
 // exports
 
@@ -748,7 +748,7 @@ if(false) {
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(undefined);
+exports = module.exports = __webpack_require__(0)(false);
 // imports
 
 
@@ -793,7 +793,7 @@ if(false) {
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(undefined);
+exports = module.exports = __webpack_require__(0)(false);
 // imports
 
 
@@ -838,7 +838,7 @@ if(false) {
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(undefined);
+exports = module.exports = __webpack_require__(0)(false);
 // imports
 
 
@@ -883,7 +883,7 @@ if(false) {
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(undefined);
+exports = module.exports = __webpack_require__(0)(false);
 // imports
 
 
@@ -895,6 +895,51 @@ exports.push([module.i, "#tetris-screen{\r\n  position: relative;\r\n  width: 40
 
 /***/ }),
 /* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(15);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {"hmr":true}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(1)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./breakoutStyle.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./breakoutStyle.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(0)(false);
+// imports
+
+
+// module
+exports.push([module.i, "#bo-screen{\r\n  background-color: #CCC;\r\n  border: 1px solid black;\r\n}\r\n\r\n#bo-canvas-container{\r\n  position: relative;\r\n  left: 0;\r\n\tright: 0;\r\n\tmargin-left: auto;\r\n \tmargin-right: auto;\r\n  max-width: 800px;\r\n}\r\n#bo-screen, #bo-player{\r\n  outline: 0;\r\n  position: absolute;\r\n  left: 0;\r\n}\r\n#bo-start{\r\n  position: absolute;\r\n  top: 150px;\r\n\tmargin-left: -40px;\r\n  background-color: #eeeeee;\r\n  border: 2px solid #444444;\r\n  border-radius: 10px;\r\n  font-size: 25px;\r\n\r\n  z-index: 1;\r\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 16 */
 /***/ (function(module, exports) {
 
 app.controller('homeCtrl', function($scope, $http){
@@ -903,7 +948,7 @@ app.controller('homeCtrl', function($scope, $http){
 })
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1398,7 +1443,7 @@ app.controller('bulletHellCtrl', function($scope, BH_player, BH_playerBullet, BH
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1578,7 +1623,7 @@ app.controller('connect4Ctrl', function($scope, $timeout){
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1919,7 +1964,94 @@ app.controller("tetrisCtrl", function($scope){
 
 
 /***/ }),
-/* 18 */
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+app.controller("breakoutCtrl", function($scope, BO_paddle){
+  let c_BG = $("#bo-screen")[0];
+  let c_PL = $("#bo-player")[0];
+  let ctx_BG = c_BG.getContext("2d");
+  let ctx_PL = c_PL.getContext("2d");
+
+  const gameWidth = c_BG.getAttribute("width");
+  const gameHeight = c_BG.getAttribute("height");
+
+  let paddle;
+  let updater;
+  let timer = 10;
+
+  // Init
+  $scope.init = function(){
+    drawTitleScreen();
+  }
+
+  $scope.startGame = function(){
+    $("#bo-start").hide();
+
+    paddle = new BO_paddle.paddle({
+      position: 40,
+      speed: 5,
+      gameWidth: gameWidth,
+      gameHeight: gameHeight
+    });
+
+    updater = setInterval(updateGame, timer)
+  }
+
+  // Keys/Controls
+  let keyState = {};
+  $scope.keyDown = function(e){
+    keyState[e.keyCode || e.which] = true;
+  }
+  $scope.keyUp = function(e){
+    keyState[e.keyCode || e.which] = false;
+  }
+  function keyChecker(){
+    // Right
+    if(keyState[68]){
+      paddle.move(68);
+    }
+    // Left
+    if(keyState[65]){
+      paddle.move(65);
+    }
+  }
+
+  function drawTitleScreen(){
+    ctx_BG.clearRect(0, 0, gameWidth, gameHeight);
+
+    //Title
+    ctx_BG.beginPath();
+    ctx_BG.font = "40px Comic Sans MS";
+    ctx_BG.fillText("Break Out", 300, 100);
+    ctx_BG.closePath();
+  }
+
+  function updateGame(){
+    ctx_BG.clearRect(0,0,gameWidth,gameHeight);
+    ctx_PL.clearRect(0,0,gameWidth,gameHeight);
+
+    keyChecker();
+    drawPaddle();
+  }
+
+  function drawPaddle(){
+    ctx_PL.beginPath();
+    ctx_PL.fillStyle = "white";
+    ctx_PL.strokeStyle = "black";
+    ctx_PL.rect(paddle.getXPos(), paddle.getYPos(), paddle.getWidth(), paddle.getHeight());
+    ctx_PL.fill();
+    ctx_PL.stroke();
+    ctx_PL.closePath();
+  }
+})
+
+
+/***/ }),
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2095,138 +2227,6 @@ app.service("BH_points", function(){
 	return {
 		spawnBullet: spawnBullet
 	};
-})
-
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(20);
-if(typeof content === 'string') content = [[module.i, content, '']];
-// Prepare cssTransformation
-var transform;
-
-var options = {"hmr":true}
-options.transform = transform
-// add the styles to the DOM
-var update = __webpack_require__(1)(content, options);
-if(content.locals) module.exports = content.locals;
-// Hot Module Replacement
-if(false) {
-	// When the styles change, update the <style> tags
-	if(!content.locals) {
-		module.hot.accept("!!../../../node_modules/css-loader/index.js!./breakoutStyle.css", function() {
-			var newContent = require("!!../../../node_modules/css-loader/index.js!./breakoutStyle.css");
-			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-			update(newContent);
-		});
-	}
-	// When the module is disposed, remove the <style> tags
-	module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(0)(undefined);
-// imports
-
-
-// module
-exports.push([module.i, "#bo-screen{\r\n  background-color: #CCC;\r\n  border: 1px solid black;\r\n}\r\n\r\n#bo-canvas-container{\r\n  position: relative;\r\n  left: 0;\r\n\tright: 0;\r\n\tmargin-left: auto;\r\n \tmargin-right: auto;\r\n  max-width: 800px;\r\n}\r\n#bo-screen, #bo-player{\r\n  outline: 0;\r\n  position: absolute;\r\n  left: 0;\r\n}\r\n#bo-start{\r\n  position: absolute;\r\n  top: 150px;\r\n\tmargin-left: -40px;\r\n  background-color: #eeeeee;\r\n  border: 2px solid #444444;\r\n  border-radius: 10px;\r\n  font-size: 25px;\r\n\r\n  z-index: 1;\r\n}\r\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 21 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-app.controller("breakoutCtrl", function($scope, BO_paddle){
-  let c_BG = $("#bo-screen")[0];
-  let c_PL = $("#bo-player")[0];
-  let ctx_BG = c_BG.getContext("2d");
-  let ctx_PL = c_PL.getContext("2d");
-
-  const gameWidth = c_BG.getAttribute("width");
-  const gameHeight = c_BG.getAttribute("height");
-
-  let paddle;
-  let updater;
-  let timer = 10;
-
-  // Init
-  $scope.init = function(){
-    drawTitleScreen();
-  }
-
-  $scope.startGame = function(){
-    $("#bo-start").hide();
-
-    paddle = new BO_paddle.paddle({
-      position: 40,
-      speed: 5,
-      gameWidth: gameWidth,
-      gameHeight: gameHeight
-    });
-
-    updater = setInterval(updateGame, timer)
-  }
-
-  // Keys/Controls
-  let keyState = {};
-  $scope.keyDown = function(e){
-    keyState[e.keyCode || e.which] = true;
-  }
-  $scope.keyUp = function(e){
-    keyState[e.keyCode || e.which] = false;
-  }
-  function keyChecker(){
-    // Right
-    if(keyState[68]){
-      paddle.move(68);
-    }
-    // Left
-    if(keyState[65]){
-      paddle.move(65);
-    }
-  }
-
-  function drawTitleScreen(){
-    ctx_BG.clearRect(0, 0, gameWidth, gameHeight);
-
-    //Title
-    ctx_BG.beginPath();
-    ctx_BG.font = "40px Comic Sans MS";
-    ctx_BG.fillText("Break Out", 300, 100);
-    ctx_BG.closePath();
-  }
-
-  function updateGame(){
-    ctx_BG.clearRect(0,0,gameWidth,gameHeight);
-    ctx_PL.clearRect(0,0,gameWidth,gameHeight);
-
-    keyChecker();
-    drawPaddle();
-  }
-
-  function drawPaddle(){
-    ctx_PL.beginPath();
-    ctx_PL.fillStyle = "white";
-    ctx_PL.strokeStyle = "black";
-    ctx_PL.rect(paddle.getXPos(), paddle.getYPos(), paddle.getWidth(), paddle.getHeight());
-    ctx_PL.fill();
-    ctx_PL.stroke();
-    ctx_PL.closePath();
-  }
 })
 
 
