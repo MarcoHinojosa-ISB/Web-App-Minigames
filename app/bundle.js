@@ -215,7 +215,7 @@ module.exports = function(list, options) {
 
 	// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
 	// tags it will allow on a page
-	if (!options.singleton && typeof options.singleton !== "boolean") options.singleton = isOldIE();
+	if (!options.singleton) options.singleton = isOldIE();
 
 	// By default, add <style> tags to the <head> element
 	if (!options.insertInto) options.insertInto = "head";
@@ -608,7 +608,7 @@ if(false) {
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(false);
+exports = module.exports = __webpack_require__(0)(undefined);
 // imports
 
 
@@ -748,7 +748,7 @@ if(false) {
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(false);
+exports = module.exports = __webpack_require__(0)(undefined);
 // imports
 
 
@@ -793,7 +793,7 @@ if(false) {
 /* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(false);
+exports = module.exports = __webpack_require__(0)(undefined);
 // imports
 
 
@@ -838,7 +838,7 @@ if(false) {
 /* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(false);
+exports = module.exports = __webpack_require__(0)(undefined);
 // imports
 
 
@@ -883,7 +883,7 @@ if(false) {
 /* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(false);
+exports = module.exports = __webpack_require__(0)(undefined);
 // imports
 
 
@@ -928,12 +928,12 @@ if(false) {
 /* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(0)(false);
+exports = module.exports = __webpack_require__(0)(undefined);
 // imports
 
 
 // module
-exports.push([module.i, "#bo-screen{\r\n  background-color: #CCC;\r\n  border: 1px solid black;\r\n}\r\n\r\n#bo-canvas-container{\r\n  position: relative;\r\n  left: 0;\r\n\tright: 0;\r\n\tmargin-left: auto;\r\n \tmargin-right: auto;\r\n  max-width: 800px;\r\n}\r\n#bo-screen, #bo-player{\r\n  outline: 0;\r\n  position: absolute;\r\n  left: 0;\r\n}\r\n#bo-start{\r\n  position: absolute;\r\n  top: 150px;\r\n\tmargin-left: -40px;\r\n  background-color: #eeeeee;\r\n  border: 2px solid #444444;\r\n  border-radius: 10px;\r\n  font-size: 25px;\r\n\r\n  z-index: 1;\r\n}\r\n", ""]);
+exports.push([module.i, "#bo-screen{\r\n  background-color: #CCC;\r\n}\r\n\r\n#bo-canvas-container{\r\n  position: relative;\r\n\tmargin: 0 auto;\r\n  max-width: 800px;\r\n}\r\n#bo-canvas-container > canvas{\r\n  border: 1px solid black;\r\n  position: absolute;\r\n  left: 0;\r\n  outline: 0;\r\n}\r\n#bo-start{\r\n  position: absolute;\r\n  top: 150px;\r\n\tmargin-left: -40px;\r\n  background-color: #eeeeee;\r\n  border: 2px solid #444444;\r\n  border-radius: 10px;\r\n  font-size: 25px;\r\n\r\n  z-index: 1;\r\n}\r\n", ""]);
 
 // exports
 
@@ -1970,18 +1970,23 @@ app.controller("tetrisCtrl", function($scope){
 "use strict";
 
 
-app.controller("breakoutCtrl", function($scope, BO_paddle){
+app.controller("breakoutCtrl", function($scope, BO_paddle, BO_brick, BO_ball, BO_mapData){
   let c_BG = $("#bo-screen")[0];
   let c_PL = $("#bo-player")[0];
+  let c_BR = $("#bo-bricks")[0];
+  let c_BLL = $("#bo-ball")[0];
   let ctx_BG = c_BG.getContext("2d");
   let ctx_PL = c_PL.getContext("2d");
+  let ctx_BR = c_BR.getContext("2d");
+  let ctx_BLL = c_BLL.getContext("2d");
 
   const gameWidth = c_BG.getAttribute("width");
   const gameHeight = c_BG.getAttribute("height");
 
-  let paddle;
+  let level, paddle, ball, mapData;
+  let bricks = [];
   let updater;
-  let timer = 10;
+
 
   // Init
   $scope.init = function(){
@@ -1991,17 +1996,30 @@ app.controller("breakoutCtrl", function($scope, BO_paddle){
   $scope.startGame = function(){
     $("#bo-start").hide();
 
+    // set initial game settings
+    level = 1;
+
     paddle = new BO_paddle.paddle({
-      position: 40,
+      xPos: (gameWidth/2) - 40,
       speed: 5,
       gameWidth: gameWidth,
       gameHeight: gameHeight
     });
+    ball = new BO_ball.ball({
+      xPos: gameWidth/2,
+      yPos: gameHeight - 250,
+      speed: 2,
+      radius: 10
+    })
+    mapData = new BO_mapData.mapData();
 
-    updater = setInterval(updateGame, timer)
+    // create bricks;
+    generateBricks();
+
+    updater = setInterval(updateGame, 10);
   }
 
-  // Keys/Controls
+  // Keys/Controls ================================
   let keyState = {};
   $scope.keyDown = function(e){
     keyState[e.keyCode || e.which] = true;
@@ -2019,25 +2037,44 @@ app.controller("breakoutCtrl", function($scope, BO_paddle){
       paddle.move(65);
     }
   }
+  // ============================================
 
+  function generateBricks(){
+    mapData.getMap(level).forEach(function(brickProp){
+      bricks.push(new BO_brick.brick({
+        xPos: brickProp[0],
+        yPos: brickProp[1],
+        health: brickProp[2]
+      }));
+    });
+  };
+
+  // Collisions =================================
+  function checkPaddleBallCollision(){
+    let dx = Math.abs(ball.getXPos() - (paddle.getXPos() + (paddle.getWidth()/2)));
+    let dy = Math.abs(ball.getYPos() - (paddle.getYPos() + (paddle.getHeight()/2)));
+
+    if(dx > (paddle.getWidth()/2) + ball.getRadius() || dy > (paddle.getHeight()/2) + ball.getRadius()){
+      return;
+    }
+
+    if(dx <= paddle.getWidth()/2 || dy <= paddle.getHeight()/2){
+      let tmp = ball.getXPos() - (paddle.getXPos() + (paddle.getWidth()/2));
+      ball.setYSpd(ball.getYSpd() * -1);
+      ball.setXSpd((tmp * 2)/100);
+    }
+  }
+  // ============================================
+
+  // Title
   function drawTitleScreen(){
-    ctx_BG.clearRect(0, 0, gameWidth, gameHeight);
-
-    //Title
     ctx_BG.beginPath();
     ctx_BG.font = "40px Comic Sans MS";
     ctx_BG.fillText("Break Out", 300, 100);
     ctx_BG.closePath();
   }
 
-  function updateGame(){
-    ctx_BG.clearRect(0,0,gameWidth,gameHeight);
-    ctx_PL.clearRect(0,0,gameWidth,gameHeight);
-
-    keyChecker();
-    drawPaddle();
-  }
-
+  // Paddle
   function drawPaddle(){
     ctx_PL.beginPath();
     ctx_PL.fillStyle = "white";
@@ -2046,6 +2083,47 @@ app.controller("breakoutCtrl", function($scope, BO_paddle){
     ctx_PL.fill();
     ctx_PL.stroke();
     ctx_PL.closePath();
+  }
+
+  // Ball
+  function drawBall(){
+    ctx_BLL.beginPath();
+    ctx_BLL.fillStyle = "white";
+    ctx_BLL.strokeStyle = "black";
+    ctx_BLL.arc(ball.getXPos(), ball.getYPos(), ball.getRadius(), 0, 2 * Math.PI);
+    ctx_BLL.fill();
+    ctx_BLL.stroke();
+    ctx_BLL.closePath();
+    ball.move();
+  }
+
+  // Bricks
+  function drawBricks(){
+    ctx_BR.beginPath();
+
+    bricks.forEach(function(brick){
+      ctx_BR.fillStyle = "white";
+      ctx_BR.strokeStyle = "black";
+      ctx_BR.rect(brick.getXPos(), brick.getYPos(), brick.getWidth(), brick.getHeight());
+      ctx_BR.fill();
+      ctx_BR.stroke();
+    })
+
+    ctx_BR.closePath();
+  }
+
+  // Update game
+  function updateGame(){
+    ctx_BG.clearRect(0,0,gameWidth,gameHeight);
+    ctx_PL.clearRect(0,0,gameWidth,gameHeight);
+    ctx_BR.clearRect(0,0,gameWidth,gameHeight);
+    ctx_BLL.clearRect(0,0,gameWidth,gameHeight);
+
+    keyChecker();
+    checkPaddleBallCollision();
+    drawPaddle();
+    drawBricks();
+    drawBall();
   }
 })
 
@@ -2237,37 +2315,19 @@ app.service("BH_points", function(){
 "use strict";
 
 
-app.service("BO_bricks", function(){
-  function brick(data){
-    const width = 60;
-    const height = 20;
-    let hp = data.hp;
-    let color = data.color;
-
-    this.getWidth = function(){
-      return width;
-    }
-    this.getHeight = function(){
-      return height;
-    }
-    this.damaged = function(){
-      hp -= 1;
-    }
-  }
-  return {
-    brick: brick
-  };
-})
-.service("BO_paddle", function(){
+app.service("BO_paddle", function(){
   function paddle(data){
-    let xPos = data.position;
+    let xPos = data.xPos;
     let yPos = data.gameHeight - 60;
-    let spd = data.speed;
-    let width = 100;
+    let xSpd = data.speed;
+    const width = 100;
     const height = 20;
     const leftScreenBorder = 0;
     const rightScreenBorder = data.gameWidth;
 
+    this.setXSpd = function(spd){
+      xSpd = spd;
+    }
     this.getWidth = function(){
       return width;
     }
@@ -2285,28 +2345,117 @@ app.service("BO_bricks", function(){
       switch(keyCode){
         // Right=68, Left=65
         case 68:
-          xPos += spd;
+          xPos += xSpd;
           if(xPos + width > rightScreenBorder)
             xPos = rightScreenBorder - width;
           break;
         case 65:
-          xPos -= spd;
+          xPos -= xSpd;
           if(xPos < leftScreenBorder)
             xPos = leftScreenBorder + 1;
           break;
       }
     }
   }
-
   return {
     paddle: paddle
   };
-})/*
-.service("BO_ball", function(){
-  return {
+})
+.service("BO_brick", function(){
+  function brick(data){
+    let health = data.health;
+    let xPos = data.xPos;
+    let yPos = data.yPos;
+    const width = 50;
+    const height = 30;
 
+    this.getHealth = function(){
+      return health;
+    }
+
+    this.getXPos = function(){
+      return xPos;
+    }
+    this.getYPos = function(){
+      return yPos;
+    }
+
+    this.getWidth = function(){
+      return width;
+    }
+    this.getHeight = function(){
+      return height;
+    }
+
+    this.damaged = function(){
+      health--;
+    }
   }
-})*/
+  return {
+    brick: brick
+  };
+})
+.service("BO_ball", function(){
+  function ball(data){
+    let xPos = data.xPos;
+    let yPos = data.yPos;
+    let xSpd = 0;
+    let ySpd = data.speed;
+    let radius = data.radius;
+
+    this.move = function(){
+      xPos += xSpd;
+      yPos += ySpd;
+    }
+    
+    this.getXPos = function(){
+      return xPos;
+    }
+    this.getYPos = function(){
+      return yPos;
+    }
+    this.getXSpd = function(){
+      return xSpd;
+    }
+    this.getYSpd = function(){
+      return ySpd;
+    }
+    this.getRadius = function(){
+      return radius;
+    }
+
+    this.setXSpd = function(x){
+      xSpd = x;
+    }
+    this.setYSpd = function(y){
+      ySpd = y;
+    }
+  }
+  return {
+    ball: ball
+  };
+})
+.service("BO_mapData", function(){
+  function mapData(){
+    // the arrays represent each brick's properties [xPos, yPos, health]
+    // the number to the left represents the level in which the properties are used
+    const maps = {
+      1: [ [0,0,1], [50,0,1], [100,0,1], [150,0,1], [200,0,1], [250,0,1], [300,0,1], [350,0,1],
+          [400,0,1], [450,0,1], [500,0,1], [550,0,1], [600,0,1], [650,0,1], [700,0,1], [750,0,1],
+          [0,30,1], [50,30,1], [100,30,1], [150,30,1], [200,30,1], [250,30,1], [300,30,1], [350,30,1],
+          [400,30,1], [450,30,1], [500,30,1], [550,30,1], [600,30,1], [650,30,1], [700,30,1], [750,30,1],
+          [0,60,1], [50,60,1], [100,60,1], [150,60,1], [200,60,1], [250,60,1], [300,60,1], [350,60,1],
+          [400,60,1], [450,60,1], [500,60,1], [550,60,1], [600,60,1], [650,60,1], [700,60,1], [750,60,1] ]
+    };
+
+    this.getMap = function(level){
+      return maps[level];
+    }
+  }
+  return {
+    mapData: mapData
+  };
+})
 
 
 /***/ })

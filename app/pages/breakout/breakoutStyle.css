@@ -1,20 +1,17 @@
 #bo-screen{
   background-color: #CCC;
-  border: 1px solid black;
 }
 
 #bo-canvas-container{
   position: relative;
-  left: 0;
-	right: 0;
-	margin-left: auto;
- 	margin-right: auto;
+	margin: 0 auto;
   max-width: 800px;
 }
-#bo-screen, #bo-player{
-  outline: 0;
+#bo-canvas-container > canvas{
+  border: 1px solid black;
   position: absolute;
   left: 0;
+  outline: 0;
 }
 #bo-start{
   position: absolute;
