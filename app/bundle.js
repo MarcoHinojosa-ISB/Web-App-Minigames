@@ -1105,12 +1105,12 @@ app.controller('bulletHellCtrl', function($scope, BH_player, BH_playerBullet, BH
 				let dx = Math.abs(en.xPos - (bullet.xPos + (bullet.width/2)));
 				let dy = Math.abs(en.yPos - (bullet.yPos + (bullet.height/2)));
 
-				// No collision if distance > 50% width of enemy + player bullet
+				// No collision if distance > 50% width/height of player bullet + enemy radius
 				if (dx > (bullet.width/2 + en.radius) || dy > (bullet.height/2 + en.radius)){
 					return true;
 				}
 
-				// Collision detected if distance < 50% player bullet
+				// Collision detected if distance < 50% width/height of player bullet
 		    if (dx <= (bullet.width/2) || dy <= (bullet.height/2)) {
 					// No points if enemy transitioning to next phase
 					if(!en.deadFlag){
@@ -1121,10 +1121,10 @@ app.controller('bulletHellCtrl', function($scope, BH_player, BH_playerBullet, BH
 				}
 
 				// Check corners of bullet for collision
-				dx -= bullet.width/2;
-  			dy -= bullet.height/2;
+				let dx2 = dx - bullet.width/2;
+  			let dy2 = dy - bullet.height/2;
 
-  			if(dx*dx + dy*dy <= (en.radius*en.radius)){
+  			if((dx2*dx2) + (dy2*dy2) <= (en.radius*en.radius)){
 					// No points if enemy transitioning to next phase
 					if(!en.deadFlag){
 						en.takeDmg(bullet.power);
@@ -1987,7 +1987,6 @@ app.controller("breakoutCtrl", function($scope, BO_paddle, BO_brick, BO_ball, BO
   let bricks = [];
   let updater;
 
-
   // Init
   $scope.init = function(){
     drawTitleScreen();
@@ -1997,11 +1996,9 @@ app.controller("breakoutCtrl", function($scope, BO_paddle, BO_brick, BO_ball, BO
     $("#bo-start").hide();
 
     // set initial game settings
-    level = 1;
-
     paddle = new BO_paddle.paddle({
       xPos: (gameWidth/2) - 40,
-      speed: 5,
+      speed: 2,
       gameWidth: gameWidth,
       gameHeight: gameHeight
     });
@@ -2011,11 +2008,13 @@ app.controller("breakoutCtrl", function($scope, BO_paddle, BO_brick, BO_ball, BO
       speed: 2,
       radius: 10
     })
+    level = 1;
     mapData = new BO_mapData.mapData();
 
-    // create bricks;
+    // Create bricks;
     generateBricks();
 
+    // Start game loop
     updater = setInterval(updateGame, 10);
   }
 
@@ -2051,17 +2050,72 @@ app.controller("breakoutCtrl", function($scope, BO_paddle, BO_brick, BO_ball, BO
 
   // Collisions =================================
   function checkPaddleBallCollision(){
+    // Get vertical/horizontal distance between the centers of paddle and ball
     let dx = Math.abs(ball.getXPos() - (paddle.getXPos() + (paddle.getWidth()/2)));
     let dy = Math.abs(ball.getYPos() - (paddle.getYPos() + (paddle.getHeight()/2)));
 
+    // No collision if distance > 50% width/height of paddle + ball radius
     if(dx > (paddle.getWidth()/2) + ball.getRadius() || dy > (paddle.getHeight()/2) + ball.getRadius()){
       return;
     }
 
+    // Collision if distance <= 50% width/height of paddle
     if(dx <= paddle.getWidth()/2 || dy <= paddle.getHeight()/2){
       let tmp = ball.getXPos() - (paddle.getXPos() + (paddle.getWidth()/2));
+      ball.setXSpd((tmp * 3)/100);
+
+      if(ball.getYSpd() > 0)
+        ball.setYSpd(ball.getYSpd() * -1);
+    }
+
+    // Check corners of paddle for collision
+    let dx2 = dx - paddle.getWidth()/2;
+    let dy2 = dy - paddle.getHeight()/2;
+
+    if((dx2*dx2) + (dy2*dy2) <= ball.getRadius()*ball.getRadius()){
+      let tmp = ball.getXPos() - (paddle.getXPos() + (paddle.getWidth()/2));
+      ball.setXSpd((tmp * 3)/100);
+
+      if(ball.getYSpd() > 0)
+        ball.setYSpd(ball.getYSpd() * -1);
+    }
+  }
+
+  function checkBrickBallCollision(){
+    bricks = bricks.filter(function(brick){
+      // Get vertical/horizontal distance between the centers of paddle and ball
+      let dx = Math.abs(ball.getXPos() - (brick.getXPos() + (brick.getWidth()/2)));
+      let dy = Math.abs(ball.getYPos() - (brick.getYPos() + (brick.getHeight()/2)));
+
+      // No collision if distance > 50% width/height of paddle + ball radius
+      if(dx > (brick.getWidth()/2) + ball.getRadius() || dy > (brick.getHeight()/2) + ball.getRadius()){
+        return true;
+      }
+
+      // Collision if distance <= 50% width/height of paddle
+      if(dx <= brick.getWidth()/2 || dy <= brick.getHeight()/2){
+        if(dx <= brick.getWidth()/2)
+          ball.setYSpd(ball.getYSpd() * -1);
+        else
+          ball.setXSpd(ball.getXSpd() * -1);
+
+        brick.damaged();
+
+        if(brick.getHealth() <= 0){
+          return false;
+        }
+      }
+
+      return true;
+    })
+  }
+
+  function checkBorderBallCollision(){
+    if(ball.getXPos() - ball.getRadius() <= 0 || ball.getXPos() + ball.getRadius() >= gameWidth){
+      ball.setXSpd(ball.getXSpd() * -1);
+    }
+    if(ball.getYPos() - ball.getRadius() <= 0){
       ball.setYSpd(ball.getYSpd() * -1);
-      ball.setXSpd((tmp * 2)/100);
     }
   }
   // ============================================
@@ -2120,7 +2174,9 @@ app.controller("breakoutCtrl", function($scope, BO_paddle, BO_brick, BO_ball, BO
     ctx_BLL.clearRect(0,0,gameWidth,gameHeight);
 
     keyChecker();
+    checkBorderBallCollision();
     checkPaddleBallCollision();
+    checkBrickBallCollision();
     drawPaddle();
     drawBricks();
     drawBall();

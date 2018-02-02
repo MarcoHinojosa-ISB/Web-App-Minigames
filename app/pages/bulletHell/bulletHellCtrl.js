@@ -151,12 +151,12 @@ app.controller('bulletHellCtrl', function($scope, BH_player, BH_playerBullet, BH
 				let dx = Math.abs(en.xPos - (bullet.xPos + (bullet.width/2)));
 				let dy = Math.abs(en.yPos - (bullet.yPos + (bullet.height/2)));
 
-				// No collision if distance > 50% width of enemy + player bullet
+				// No collision if distance > 50% width/height of player bullet + enemy radius
 				if (dx > (bullet.width/2 + en.radius) || dy > (bullet.height/2 + en.radius)){
 					return true;
 				}
 
-				// Collision detected if distance < 50% player bullet
+				// Collision detected if distance < 50% width/height of player bullet
 		    if (dx <= (bullet.width/2) || dy <= (bullet.height/2)) {
 					// No points if enemy transitioning to next phase
 					if(!en.deadFlag){
@@ -167,10 +167,10 @@ app.controller('bulletHellCtrl', function($scope, BH_player, BH_playerBullet, BH
 				}
 
 				// Check corners of bullet for collision
-				dx -= bullet.width/2;
-  			dy -= bullet.height/2;
+				let dx2 = dx - bullet.width/2;
+  			let dy2 = dy - bullet.height/2;
 
-  			if(dx*dx + dy*dy <= (en.radius*en.radius)){
+  			if((dx2*dx2) + (dy2*dy2) <= (en.radius*en.radius)){
 					// No points if enemy transitioning to next phase
 					if(!en.deadFlag){
 						en.takeDmg(bullet.power);
