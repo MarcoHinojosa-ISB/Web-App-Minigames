@@ -22,7 +22,7 @@ app.controller('bulletHellCtrl', function($scope, BH_player, BH_playerBullet, BH
 		let pl, pl_ship, en;
 
 		// player sprite
-		function shipAnimate(path,frameT, framesPR, frameW, frameH){
+		function shipAnimate(path, frameT, framesPR, frameW, frameH){
 			let image = new Image();
 			image.src = path;
 
@@ -31,7 +31,7 @@ app.controller('bulletHellCtrl', function($scope, BH_player, BH_playerBullet, BH
 			let frameWidth = frameW;
 			let frameHeight = frameH;
 
-			this.draw = function(w, h, x, y){
+			this.draw = function(x, y, w, h){
 				currentFrame = (currentFrame + 1) % totalFrames;
 
 				let row = Math.floor(currentFrame / framesPerRow);
@@ -44,7 +44,7 @@ app.controller('bulletHellCtrl', function($scope, BH_player, BH_playerBullet, BH
 
 		// enemy bullet images (more to come)
 		enBulletImages.push([new Image(),"assets/images/bullethell/shot1.png"]);
-		enBulletImages = enBulletImages.map(function(curr,i){
+		enBulletImages = enBulletImages.map(function(curr){
 			curr[0].src = curr[1];
 			return curr[0];
 		});
@@ -279,7 +279,7 @@ app.controller('bulletHellCtrl', function($scope, BH_player, BH_playerBullet, BH
 		function drawPlayer(){
 			//sprite/graze area
 			ctx_PL.beginPath();
-			pl_ship.draw((pl.radius*5)*2, (pl.radius*5)*2, pl.xPos - (pl.radius*5), pl.yPos - (pl.radius*5));
+			pl_ship.draw(pl.xPos - (pl.radius*5), pl.yPos - (pl.radius*5), (pl.radius*5)*2, (pl.radius*5)*2);
 			// ctx_PL.fillStyle = "lime";
 			// ctx_PL.arc(pl.xPos, pl.yPos, pl.radius*3, 0, 2 * Math.PI);
 			// ctx_PL.fill();
