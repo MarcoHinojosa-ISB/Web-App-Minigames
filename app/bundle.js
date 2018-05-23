@@ -753,7 +753,7 @@ exports = module.exports = __webpack_require__(0)(undefined);
 
 
 // module
-exports.push([module.i, "", ""]);
+exports.push([module.i, "h4, h2{\r\n  text-align: center;\r\n}\r\n", ""]);
 
 // exports
 
@@ -943,9 +943,10 @@ exports.push([module.i, "#bo-screen{\r\n  background-color: #CCC;\r\n}\r\n\r\n#b
 /***/ (function(module, exports) {
 
 app.controller('homeCtrl', function($scope, $http){
-	$scope.test = "This is the home page";
-	$scope.test2 = "dsadasd";
+	$scope.welcome = "Welcome, this is the home page";
+	$scope.controls = "For all games, move with WASD";
 })
+
 
 /***/ }),
 /* 17 */
@@ -1228,6 +1229,13 @@ app.controller('bulletHellCtrl', function($scope, BH_player, BH_playerBullet, BH
 			ctx_BG.fill();
 			ctx_BG.rect(gameWidth-270, 80, 100, 20);
 			ctx_BG.stroke();
+			ctx_BG.closePath();
+
+			//explain controls
+			ctx_BG.beginPath();
+			ctx_BG.font = "18px sans-serif";
+			ctx_BG.fillStyle = "#000";
+			ctx_BG.fillText("Shoot with 'K'",gameWidth-290, 290);
 			ctx_BG.closePath();
 		}
 		function drawPlayer(){

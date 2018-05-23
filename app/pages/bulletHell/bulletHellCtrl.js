@@ -275,6 +275,13 @@ app.controller('bulletHellCtrl', function($scope, BH_player, BH_playerBullet, BH
 			ctx_BG.rect(gameWidth-270, 80, 100, 20);
 			ctx_BG.stroke();
 			ctx_BG.closePath();
+
+			//explain controls
+			ctx_BG.beginPath();
+			ctx_BG.font = "18px sans-serif";
+			ctx_BG.fillStyle = "#000";
+			ctx_BG.fillText("Shoot with 'K'",gameWidth-290, 290);
+			ctx_BG.closePath();
 		}
 		function drawPlayer(){
 			//sprite/graze area
